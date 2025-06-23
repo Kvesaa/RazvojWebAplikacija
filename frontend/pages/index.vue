@@ -16,7 +16,7 @@
     <div class="quick-actions">
       <h2>Quick Actions</h2>
       <div class="button-group">
-        <button>Add Flight</button>
+        <NuxtLink to="/flights/new"><button>Add Flight</button></NuxtLink>
         <button>Add Booking</button>
         <button>Add Passenger</button>
       </div>
@@ -59,27 +59,36 @@
 </template>
 
 <script setup lang="ts">
-import StatCard from "~/components/dashboard/StatCard.vue";
-type Flight = {
-  flight_id: number;
-  flightno: string;
-  from: number;
-  to: number;
-  departure: string;
-  arrival: string;
-  airline_id: number;
-  airplane_id: number;
-};
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useAsyncData, useRuntimeConfig } from '#imports'
+import StatCard from '~/components/dashboard/StatCard.vue'
 
-const config = useRuntimeConfig();
+type Flight = {
+  flight_id: number
+  flightno: string
+  from: number
+  to: number
+  departure: string
+  arrival: string
+  airline_id: number
+  airplane_id: number
+}
+
+const route  = useRoute()
+const config = useRuntimeConfig()
+
+// key must change on every navigation
+const dataKey = computed(() => `flights-${route.fullPath}`)
 
 const {
   data: flights,
   pending,
   error,
-} = await useFetch<Flight[]>("/api/flights", {
-  baseURL: config.public.apiBase,
-});
+} = await useAsyncData<Flight[]>(
+  dataKey,
+  () => $fetch('/api/flights', { baseURL: config.public.apiBase })
+)
 </script>
 
 <style scoped>

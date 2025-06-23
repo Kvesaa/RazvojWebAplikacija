@@ -36,9 +36,9 @@
     </div>
 
     <div class="button-group">
-      <NuxtLink :to="`/flights/${flightId}/edit`"
-        ><button>Edit</button></NuxtLink
-      >
+      <NuxtLink :to="`/flights/${flightId}/edit`">
+        <button>Edit</button>
+      </NuxtLink>
       <button class="delete" @click="onDelete">Delete</button>
     </div>
 
@@ -54,11 +54,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="passenger in passengers" :key="passenger.id">
-          <td>{{ passenger.seat }}</td>
-          <td>{{ passenger.name }}</td>
-          <td>{{ passenger.email }}</td>
-          <td>{{ passenger.contact }}</td>
+        <tr v-for="p in passengers" :key="p.id">
+          <td>{{ p.seat }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.email }}</td>
+          <td>{{ p.contact }}</td>
           <td><button class="view-button">View</button></td>
         </tr>
         <tr v-if="passengers.length === 0">
@@ -98,69 +98,57 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from "vue-router";
-import { useFlights } from "~/composables/useFlights";
-import { useRuntimeConfig } from "#imports";
+import { ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAsyncData, useRuntimeConfig } from '#imports'
+import { useFlights } from '~/composables/useFlights'
 
-const route = useRoute();
-const router = useRouter();
-const { deleteFlight } = useFlights();
+// Params, router, config
+const route    = useRoute()
+const router   = useRouter()
+const config   = useRuntimeConfig()
+const flightId = computed(() => Number(route.params.id))
 
-const flightId = Number(route.params.id);
-const config = useRuntimeConfig();
+// Dynamic key so it re-fetches on each navigation
+const dataKey = computed(() => `flight-${flightId.value}-${route.fullPath}`)
 
-const { data, error, pending } = await useFetch(`/api/flights/${flightId}`, {
-  baseURL: config.public.apiBase,
-  headers: { Accept: "application/json" },
-});
+// Fetch flight using useAsyncData (no TS generics)
+const { data: flightData, error } = await useAsyncData(
+  dataKey,
+  () => $fetch(`/api/flights/${flightId.value}`, {
+    baseURL: config.public.apiBase,
+    headers: { Accept: 'application/json' }
+  }),
+  {
+    onError: () => {
+      router.replace('/flights')
+    }
+  }
+)
 
-const flight = computed(() => data.value);
+// Expose plain `flight` for template
+const flight = computed(() => flightData.value)
 
+// Passengers (static for now)
 const passengers = ref([
-  {
-    id: 1,
-    seat: '12A',
-    name: 'John Doe',
-    email: 'john@example.com',
-    contact: '+123 456 7890',
-  },
-  {
-    id: 2,
-    seat: '14B',
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    contact: '+987 654 3210',
-  },
-  {
-    id: 3,
-    seat: '15C',
-    name: 'Carlos Ruiz',
-    email: 'carlos.ruiz@example.com',
-    contact: '+385 91 234 5678',
-  },
-  {
-    id: 4,
-    seat: '16D',
-    name: 'Johannes Schmidt',
-    email: 'johannessc@example.com',
-    contact: '+387 62 112 334',
-  },
+  { id:1, seat:'12A', name:'John Doe',            email:'john@example.com',       contact:'+123 456 7890' },
+  { id:2, seat:'14B', name:'Jane Smith',          email:'jane@example.com',       contact:'+987 654 3210' },
+  { id:3, seat:'15C', name:'Carlos Ruiz',         email:'carlos.ruiz@example.com',contact:'+385 91 234 5678' },
+  { id:4, seat:'16D', name:'Johannes Schmidt',    email:'johannessc@example.com', contact:'+387 62 112 334' }
 ])
 
-if (error.value) {
-  console.error("Fetch failed:", error.value);
-}
-
-function formatDate(datetime) {
-  if (!datetime) return "";
-  return new Date(datetime).toLocaleString();
-}
-
+// Delete via composable, then navigate home
+const { deleteFlight } = useFlights()
 function onDelete() {
-  if (confirm("Are you sure you want to delete this flight?")) {
-    deleteFlight(flightId);
-    router.push("/flights");
+  if (confirm('Are you sure you want to delete this flight?')) {
+    deleteFlight(flightId.value)
+    router.push('/flights')
   }
+}
+
+// Date formatter
+function formatDate(dt) {
+  return dt ? new Date(dt).toLocaleString() : ''
 }
 </script>
 

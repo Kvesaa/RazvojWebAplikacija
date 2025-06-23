@@ -42,46 +42,58 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { reactive } from 'vue'
-import { useFetch, useRuntimeConfig } from '#imports'
+import { reactive, computed, watchEffect } from 'vue'
+import { useAsyncData, useRuntimeConfig } from '#imports'
 
 const route    = useRoute()
 const router   = useRouter()
 const config   = useRuntimeConfig()
-const flightId = Number(route.params.id)
 
-// 1) fetch flight, redirect on error
-const { data: flight } = await useFetch(
-  `/api/flights/${flightId}`,
-  {
-    baseURL: config.public.apiBase,
-    onError: () => {
-      router.replace('/flights')
-    }
-  }
+// 1) Dynamic flightId + key for AsyncData
+const flightId = computed(() => Number(route.params.id))
+const dataKey  = computed(() => `flight-${flightId.value}`)
+
+// 2) Fetch via useAsyncData (auto re-runs when dataKey changes)
+const { data: flight, error } = await useAsyncData(
+  dataKey,
+  () => $fetch(`/api/flights/${flightId.value}`, {
+    baseURL: config.public.apiBase
+  }),
+  
 )
 
-// 2) seed reactive form
+// 3) Seed reactive form when flight arrives
 const form = reactive({
-  flightno:   flight.value.flightno,
-  from:       flight.value.from,
-  to:         flight.value.to,
-  departure:  flight.value.departure,
-  arrival:    flight.value.arrival,
-  airline_id: flight.value.airline_id,
-  airplane_id:flight.value.airplane_id
+  flightno:   '',
+  from:        0,
+  to:          0,
+  departure:  '',
+  arrival:    '',
+  airline_id:  0,
+  airplane_id: 0
 })
 
-// 3) on submit, PUT and navigate back to details
+watchEffect(() => {
+  if (!flight.value) return
+  form.flightno    = flight.value.flightno
+  form.from        = flight.value.from
+  form.to          = flight.value.to
+  form.departure   = flight.value.departure
+  form.arrival     = flight.value.arrival
+  form.airline_id  = flight.value.airline_id
+  form.airplane_id = flight.value.airplane_id
+})
+
+// 4) Submit: PUT back and navigate
 async function submit() {
-  await $fetch(`/api/flights/${flightId}`, {
+  await $fetch(`/api/flights/${flightId.value}`, {
     method: 'PUT',
     baseURL: config.public.apiBase,
-    body: form
+    body: { ...form }
   })
-  router.push(`/flights/${flightId}`)
+  router.push(`/flights/${flightId.value}`)
 }
 </script>
 

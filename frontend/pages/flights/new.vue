@@ -1,7 +1,6 @@
 <template>
   <div class="form-page">
     <h1>Add Flight</h1>
-
     <form @submit.prevent="submit">
       <label>
         Flight No.:
@@ -10,12 +9,12 @@
 
       <label>
         From:
-        <input v-model="form.from" required />
+        <input v-model.number="form.from" required />
       </label>
 
       <label>
         To:
-        <input v-model="form.to" required />
+        <input v-model.number="form.to" required />
       </label>
 
       <label>
@@ -30,49 +29,61 @@
 
       <label>
         Airline:
-        <input v-model="form.airline_id" required />
+        <input v-model.number="form.airline_id" required />
       </label>
 
       <label>
         Airplane:
-        <input v-model="form.airplane_id" required />
+        <input v-model.number="form.airplane_id" required />
       </label>
 
-      <button type="submit">Add Flight</button>
+      <div class="button-row">
+        <button type="submit">Add Flight</button>
+        <button type="button" class="cancel" @click="cancel">Cancel</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { useFlights } from "~/composables/useFlights";
+import { reactive } from 'vue'
+import { useRouter, useRuntimeConfig } from '#imports'
 
-const router = useRouter();
-const { addFlight } = useFlights();
+const router = useRouter()
+const config = useRuntimeConfig()
 
 const form = reactive({
-  flightno: '',
-  from: '',
-  to: '',
-  departure: '',
-  arrival: '',
-  airline_id: '',
-  airplane_id: ''
+  flightno:   '',
+  from:        0,
+  to:          0,
+  departure:  '',
+  arrival:    '',
+  airline_id:  0,
+  airplane_id: 0
 })
 
-function submit() {
-  const flight = {
-    ...form,
-    from: Number(form.from),
-    to: Number(form.to),
-    airline_id: Number(form.airline_id),
-    airplane_id: Number(form.airplane_id),
-    departure: form.departure.replace('T', ' ') + ':00',
-    arrival: form.arrival.replace('T', ' ') + ':00'
+async function submit() {
+  const payload = {
+    flightno:   form.flightno,
+    from:       form.from,
+    to:         form.to,
+    departure:  form.departure.replace('T', ' ') + ':00',
+    arrival:    form.arrival.replace('T', ' ') + ':00',
+    airline_id: form.airline_id,
+    airplane_id: form.airplane_id
   }
 
-  addFlight(flight)
-  router.push('/flights')
+  await $fetch('/api/flights', {
+    method: 'POST',
+    baseURL: config.public.apiBase,
+    body: payload
+  })
+
+  router.replace('/flights')
+}
+
+function cancel() {
+  router.replace('/flights')
 }
 </script>
 
@@ -84,15 +95,26 @@ function submit() {
   flex-direction: column;
   gap: 1rem;
 }
+
 label {
   display: flex;
   flex-direction: column;
 }
+
+.button-row {
+  display: flex;
+  gap: 1rem;
+}
+
 button {
   background-color: #0b3a66;
   color: white;
-  padding: 10px;
+  padding: 10px 16px;
   border: none;
   cursor: pointer;
+}
+
+button.cancel {
+  background-color: #aaa;
 }
 </style>

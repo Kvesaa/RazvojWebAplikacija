@@ -39,8 +39,8 @@ import logoUrl from '~/assets/aeroadmin.png'
 }
 
 .logo {
-  padding: 20px;
-  font-size: 20px;
+  padding: 10px;
+  font-size: 10px;
   font-weight: bold;
   background-color: #0a2f56;
   text-align: center;
@@ -52,7 +52,7 @@ import logoUrl from '~/assets/aeroadmin.png'
 }
 
 .logo-img {
-  width: 48px;
+  width: 88px;
   height: auto;
 }
 

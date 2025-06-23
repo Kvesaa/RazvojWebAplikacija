@@ -14,7 +14,9 @@
       <button type="submit" class="search-button">Search</button>
     </form>
 
-    <table class="flights-table">
+    <div v-if="pending">Loading...</div>
+    <div v-else-if="error">Error loading flights: {{ error.message }}</div>
+    <table v-else class="flights-table">
       <thead>
         <tr>
           <th>Flight</th>
@@ -50,7 +52,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from "vue";
+import { useRoute } from 'vue-router'
+import { computed, reactive } from 'vue'
+import { useAsyncData, useRuntimeConfig } from '#imports'
+import StatCard from '~/components/dashboard/StatCard.vue'
+
 type Flight = {
   flight_id: number
   flightno: string
@@ -62,32 +68,41 @@ type Flight = {
   airplane_id: number
 }
 
+const route  = useRoute()
 const config = useRuntimeConfig()
 
-const { data: flights, pending, error } = await useFetch<Flight[]>('/api/flights', {
-  baseURL: config.public.apiBase,
-})
+// dynamic key so useAsyncData re-runs on every navigation to /flights
+const dataKey = computed(() => `flights-${route.fullPath}`)
 
+const {
+  data: flights,
+  pending,
+  error,
+} = await useAsyncData<Flight[]>(
+  dataKey,
+  () => $fetch('/api/flights', { baseURL: config.public.apiBase })
+)
+
+// client-side filters
 const filters = reactive({
-  flight: '',
-  from: '',
-  to: '',
-  departure: '',
-  arrival: '',
+  flight:   '',
+  from:     '',
+  to:       '',
+  departure:'',
+  arrival:  '',
 })
 
 const filteredFlights = computed(() => {
-  return (flights.value || []).filter((flight) =>
-    (!filters.flight || flight.flightno.toLowerCase().includes(filters.flight.toLowerCase())) &&
-    (!filters.from || String(flight.from).includes(filters.from)) &&
-    (!filters.to || String(flight.to).includes(filters.to)) &&
-    (!filters.departure || flight.departure.includes(filters.departure)) &&
-    (!filters.arrival || flight.arrival.includes(filters.arrival))
+  return (flights.value || []).filter((f) =>
+    (!filters.flight    || f.flightno.toLowerCase().includes(filters.flight.toLowerCase())) &&
+    (!filters.from      || String(f.from).includes(filters.from)) &&
+    (!filters.to        || String(f.to).includes(filters.to)) &&
+    (!filters.departure || f.departure.includes(filters.departure)) &&
+    (!filters.arrival   || f.arrival.includes(filters.arrival))
   )
 })
 
 function searchFlights() {
-  // Optional
 }
 </script>
 
