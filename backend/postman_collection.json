@@ -1,0 +1,529 @@
+{
+	"info": {
+		"_postman_id": "aviation-api-collection",
+		"name": "Aviation Management API",
+		"description": "Complete API collection for Aviation Management System with v1 Basic Auth and v2 Sanctum authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "noauth"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "basic_auth_email",
+			"value": "basic_user@example.com",
+			"type": "string"
+		},
+		{
+			"key": "basic_auth_password",
+			"value": "basic_pass",
+			"type": "string"
+		},
+		{
+			"key": "sanctum_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Create Sanctum Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"reader@example.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/token",
+							"host": ["{{base_url}}"],
+							"path": ["api", "token"]
+						},
+						"description": "Exchange session for Sanctum token"
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke Sanctum Token",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{sanctum_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/token",
+							"host": ["{{base_url}}"],
+							"path": ["api", "token"]
+						},
+						"description": "Revoke current Sanctum token"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API v1 - Basic Auth",
+			"item": [
+				{
+					"name": "Airports",
+					"item": [
+						{
+							"name": "List Airports (Public)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/airport",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airport"]
+								},
+								"description": "Public read access to airports"
+							},
+							"response": []
+						},
+						{
+							"name": "Show Airport (Public)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/airport/1",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airport", "1"]
+								},
+								"description": "Public read access to specific airport"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Airport (Basic Auth)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{basic_auth_email}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{basic_auth_password}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"iata\": \"LAX\",\n    \"icao\": \"KLAX\",\n    \"name\": \"Los Angeles International Airport\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/airport",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airport"]
+								},
+								"description": "Create airport with Basic Auth"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Airport (Basic Auth)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{basic_auth_email}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{basic_auth_password}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"iata\": \"LAX\",\n    \"icao\": \"KLAX\",\n    \"name\": \"Los Angeles International Airport - Updated\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/airport/1",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airport", "1"]
+								},
+								"description": "Update airport with Basic Auth"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Airport (Basic Auth)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{basic_auth_email}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{basic_auth_password}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/airport/1",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airport", "1"]
+								},
+								"description": "Delete airport with Basic Auth"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Airlines",
+					"item": [
+						{
+							"name": "List Airlines (Public)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/airline",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airline"]
+								},
+								"description": "Public read access to airlines"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Airline (Basic Auth)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{basic_auth_email}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{basic_auth_password}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"iata\": \"AA\",\n    \"airlinename\": \"American Airlines\",\n    \"base_airport\": 1\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/airline",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "airline"]
+								},
+								"description": "Create airline with Basic Auth"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Flights (Protected)",
+					"item": [
+						{
+							"name": "List Flights (Basic Auth)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{basic_auth_email}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{basic_auth_password}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/flights",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "flights"]
+								},
+								"description": "List flights with Basic Auth"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Flight (Basic Auth)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{basic_auth_email}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{basic_auth_password}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"flightno\": \"AA100\",\n    \"from\": 1,\n    \"to\": 2,\n    \"departure\": \"2023-01-01 10:00:00\",\n    \"arrival\": \"2023-01-01 14:00:00\",\n    \"airline_id\": 1,\n    \"airplane_id\": 1\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/flights",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "flights"]
+								},
+								"description": "Create flight with Basic Auth"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API v2 - Sanctum",
+			"item": [
+				{
+					"name": "Airports",
+					"item": [
+						{
+							"name": "List Airports",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{sanctum_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v2/airport",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v2", "airport"]
+								},
+								"description": "List airports with Sanctum token"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Airport",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{sanctum_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"iata\": \"JFK\",\n    \"icao\": \"KJFK\",\n    \"name\": \"John F. Kennedy International Airport\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v2/airport",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v2", "airport"]
+								},
+								"description": "Create airport with Sanctum token"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Flights",
+					"item": [
+						{
+							"name": "List Flights",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{sanctum_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v2/flights",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v2", "flights"]
+								},
+								"description": "List flights with Sanctum token"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Flight",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{sanctum_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"flightno\": \"UA200\",\n    \"from\": 1,\n    \"to\": 2,\n    \"departure\": \"2023-01-01 15:00:00\",\n    \"arrival\": \"2023-01-01 19:00:00\",\n    \"airline_id\": 1,\n    \"airplane_id\": 1\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v2/flights",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v2", "flights"]
+								},
+								"description": "Create flight with Sanctum token"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
+
+
+

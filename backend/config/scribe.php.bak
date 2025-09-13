@@ -1,0 +1,538 @@
+<?php
+
+return [
+    /*
+     * The type of documentation output to generate.
+     * - "static" will generate a static HTMl page in the /public/docs folder,
+     * - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
+     */
+    'type' => 'static',
+
+    /*
+     * Settings for `static` type output.
+     */
+    'static' => [
+        /*
+         * HTML documentation, assets and Postman collections will be generated to this folder.
+         * Source Markdown will be generated to resources/docs.
+         */
+        'output_path' => 'public/docs',
+    ],
+
+    /*
+     * Settings for `laravel` type output.
+     */
+    'laravel' => [
+        /*
+         * Whether to automatically create a docs endpoint for you to view your generated docs.
+         * If this is false, you can still set up routing manually.
+         */
+        'add_routes' => true,
+
+        /*
+         * URL path to use for the docs endpoint (if `add_routes` is true).
+         * By default, `/docs` will point to the HTML version and `/docs.postman` to the Postman collection.
+         * If you'd like different values, specify the base path here.
+         */
+        'docs_url' => '/docs',
+
+        /*
+         * Middleware to attach to the docs endpoint (if `add_routes` is true).
+         */
+        'middleware' => [],
+    ],
+
+    /*
+     * How is your API authenticated? This information will be used in the displayed docs, generated examples and response calls.
+     * Available options: bearer, basic, apikey, cookie
+     */
+    'auth' => [
+        'enabled' => true,
+        'in' => 'bearer',
+        'name' => 'Authorization',
+        'use_value' => env('SCRIBE_AUTH_KEY'),
+        'placeholder' => '{YOUR_AUTH_KEY}',
+        'extra_info' => 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.',
+    ],
+
+    /*
+     * Text to place in the "Introduction" section, right after the `description`
+     */
+    'intro_text' => <<<INTRO
+This documentation aims to provide all the information you need to work with our API.
+
+<aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile), and you can switch the programming language of the examples with the tabs in the top right (or from the menu on mobile).</aside>
+INTRO
+,
+
+    /*
+     * Example requests for each endpoint will be shown in each of these languages.
+     * Supported options are: bash, javascript, php, python
+     * To add a language of your own, see https://scribe.knuckles.wtf/laravel/advanced/example-requests
+     *
+     */
+    'example_languages' => [
+        'bash',
+        'javascript',
+        'php',
+    ],
+
+    /*
+     * Generate a Postman collection (v2.1.0) in addition to HTML docs.
+     * For 'static' docs, the collection will be generated to public/docs/collection.json.
+     * For 'laravel' docs, it will be generated to storage/app/scribe/collection.json.
+     * Setting this to false will skip collection generation.
+     */
+    'postman' => [
+        'enabled' => true,
+        'overrides' => [
+            // 'info.version' => '2.0.0',
+        ],
+    ],
+
+    /*
+     * Generate an OpenAPI spec (v3.0.1) in addition to docs.
+     * For 'static' docs, the collection will be generated to public/docs/openapi.yaml.
+     * For 'laravel' docs, it will be generated to storage/app/scribe/openapi.yaml.
+     * Setting this to false will skip OpenAPI spec generation.
+     */
+    'openapi' => [
+        'enabled' => true,
+        'overrides' => [
+            // 'info.version' => '2.0.0',
+        ],
+    ],
+
+    /*
+     * Name for your group of endpoints (by default, this will be extracted from your config('app.name')).
+     */
+    'title' => null,
+
+    /*
+     * A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
+     */
+    'description' => 'Aviation Management API Documentation',
+
+    /*
+     * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url').
+     */
+    'base_url' => null,
+
+    /*
+     * Tell Scribe what routes to generate documentation for.
+     * Each group contains rules defining what routes should be included ('include' and/or 'exclude'),
+     * and settings which should be applied to them when generating documentation
+     * (each group will be merged into the route's settings).
+     */
+    'routes' => [
+        [
+            /*
+             * Specify conditions to determine what routes will be parsed in this group.
+             * A route must satisfy ALL conditions to be included.
+             */
+            'match' => [
+                /*
+                 * Match only routes whose paths match this pattern (use * as a wildcard to match any characters).
+                 */
+                'prefixes' => ['api/*'],
+
+                /*
+                 * Match only routes registered under this version. This option is ignored for Laravel 5.7+.
+                 */
+                'versions' => ['v1'],
+
+                /*
+                 * Match only routes whose names match this pattern (use * as a wildcard to match any characters).
+                 */
+                'names' => ['*'],
+
+                /*
+                 * Match only routes whose domains match this pattern (use * as a wildcard to match any characters).
+                 */
+                'domains' => ['*'],
+            ],
+
+            /*
+             * Include these routes even if they did not match the rules above.
+             * The route can be referenced by path, name or controller@method.
+             */
+            'include' => [
+                // 'users.index', 'healthcheck*'
+            ],
+
+            /*
+             * Exclude these routes even if they matched the rules above.
+             * The route can be referenced by path, name or controller@method.
+             */
+            'exclude' => [
+                // 'users.create', 'admin.*'
+            ],
+
+            /*
+             * Settings to be applied to all routes in this group when generating documentation.
+             */
+            'apply' => [
+                /*
+                 * Headers to be added to the example requests
+                 */
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+
+                /*
+                 * Query parameters to be added to the example requests
+                 */
+                'queryParameters' => [
+                    // 'key' => 'value',
+                ],
+
+                /*
+                 * Body parameters to be added to the example requests
+                 */
+                'bodyParameters' => [
+                    // 'key' => 'value',
+                ],
+
+                /*
+                 * File upload parameters to be added to the example requests
+                 */
+                'fileParameters' => [
+                    // 'key' => 'path/to/file',
+                ],
+
+                /*
+                 * Response headers to be added to the example responses
+                 */
+                'responseHeaders' => [
+                    // 'key' => 'value',
+                ],
+
+                /*
+                 * Response calls to be made for the example requests
+                 */
+                'responses' => [
+                    // ['status' => 200, 'content' => ['key' => 'value']],
+                ],
+
+                /*
+                 * This will be merged with automatically generated responses and will take precedence over them.
+                 */
+                'responseCalls' => [
+                    /*
+                     * Settings for `responseCalls`
+                     */
+                    'only' => [
+                        // 'users.store', 'users.update'
+                    ],
+                    'except' => [
+                        // 'users.index'
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    /*
+     * The logo to be displayed in the sidebar. By default, the app's logo (if available) is used.
+     * This should be a path or URL to an image file (SVG works best).
+     */
+    'logo' => false,
+
+    /*
+     * If you would like the package to generate the same example values for parameters on each run,
+     * set this to any number (eg. 1234)
+     */
+    'faker_seed' => null,
+
+    /*
+     * With API groups, you can categorize your API endpoints. Each group will be shown as a separate section in the docs.
+     * The group name will be used as the title, and the description will be shown below it.
+     */
+    'groups' => [
+        /*
+         * Endpoints which don't define a @group will be placed in this default group.
+         */
+        'default' => [
+            'title' => 'Endpoints',
+            'description' => 'These endpoints are available.',
+        ],
+    ],
+
+    /*
+     * Custom logo path. This will be used as the value of the src attribute for the <img> tag,
+     * so make sure it points to an accessible URL or path. Set to false to not use a logo.
+     *
+     * For example, if your logo is in public/img:
+     * - 'logo' => '../img/logo.png' // for `static` type (output folder is public/docs)
+     * - 'logo' => 'img/logo.png' // for `laravel` type
+     *
+     */
+    'logo' => false,
+
+    /*
+     * If you would like the package to generate the same example values for parameters on each run,
+     * set this to any number (eg. 1234)
+     */
+    'faker_seed' => null,
+
+    /*
+     * Configure how responses are generated
+     */
+    'responses' => [
+        /*
+         * A single example response for each endpoint will be generated from the first response call.
+         * If you'd like to generate multiple responses, set this to true.
+         */
+        'multiple_examples' => false,
+
+        /*
+         * The default HTTP status code to be used for example responses.
+         */
+        'default_status' => 200,
+
+        /*
+         * Headers that should be included in the example responses.
+         */
+        'default_headers' => [
+            'Content-Type' => 'application/json',
+        ],
+    ],
+
+    /*
+     * Configure how request body parameters are generated
+     */
+    'requestBody' => [
+        /*
+         * Whether to automatically generate a request body from the route's validation rules
+         */
+        'auto_generate' => true,
+
+        /*
+         * Whether to include parameters that don't have validation rules
+         */
+        'include_parameters_without_validation' => true,
+    ],
+
+    /*
+     * Configure how response fields are generated
+     */
+    'responseFields' => [
+        /*
+         * Whether to automatically generate response fields from the route's validation rules
+         */
+        'auto_generate' => true,
+
+        /*
+         * Whether to include parameters that don't have validation rules
+         */
+        'include_parameters_without_validation' => true,
+    ],
+
+    /*
+     * For endpoints which don't specify a @group, this will be used as the group name.
+     */
+    'default_group' => 'Endpoints',
+
+    /*
+     * Custom HTML to be injected into the <head> section of the generated documentation.
+     */
+    'custom_head' => '',
+
+    /*
+     * Custom HTML to be injected into the <body> section of the generated documentation.
+     */
+    'custom_body' => '',
+
+    /*
+     * Custom CSS to be injected into the generated documentation.
+     */
+    'custom_css' => '',
+
+    /*
+     * Custom JavaScript to be injected into the generated documentation.
+     */
+    'custom_js' => '',
+
+    /*
+     * The theme to use for the generated documentation.
+     * Available themes: default, slate, dark
+     */
+    'theme' => 'default',
+
+    /*
+     * The language to use for the generated documentation.
+     * Available languages: en, es, fr, pt, de, it, ru, ja, ko, zh
+     */
+    'language' => 'en',
+
+    /*
+     * Whether to show the "Try it out" button for endpoints.
+     */
+    'try_it_out' => [
+        'enabled' => true,
+        'base_url' => null,
+        'fetch_url' => null,
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Postman collection.
+     */
+    'download' => [
+        'enabled' => true,
+        'filename' => 'collection.json',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the OpenAPI spec.
+     */
+    'download_openapi' => [
+        'enabled' => true,
+        'filename' => 'openapi.yaml',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the HTML documentation.
+     */
+    'download_html' => [
+        'enabled' => true,
+        'filename' => 'docs.html',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Markdown documentation.
+     */
+    'download_markdown' => [
+        'enabled' => true,
+        'filename' => 'docs.md',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the PDF documentation.
+     */
+    'download_pdf' => [
+        'enabled' => false,
+        'filename' => 'docs.pdf',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Word documentation.
+     */
+    'download_word' => [
+        'enabled' => false,
+        'filename' => 'docs.docx',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Excel documentation.
+     */
+    'download_excel' => [
+        'enabled' => false,
+        'filename' => 'docs.xlsx',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the CSV documentation.
+     */
+    'download_csv' => [
+        'enabled' => false,
+        'filename' => 'docs.csv',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the XML documentation.
+     */
+    'download_xml' => [
+        'enabled' => false,
+        'filename' => 'docs.xml',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the YAML documentation.
+     */
+    'download_yaml' => [
+        'enabled' => false,
+        'filename' => 'docs.yaml',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the JSON documentation.
+     */
+    'download_json' => [
+        'enabled' => false,
+        'filename' => 'docs.json',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the HTML documentation.
+     */
+    'download_html' => [
+        'enabled' => true,
+        'filename' => 'docs.html',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Markdown documentation.
+     */
+    'download_markdown' => [
+        'enabled' => true,
+        'filename' => 'docs.md',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the PDF documentation.
+     */
+    'download_pdf' => [
+        'enabled' => false,
+        'filename' => 'docs.pdf',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Word documentation.
+     */
+    'download_word' => [
+        'enabled' => false,
+        'filename' => 'docs.docx',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the Excel documentation.
+     */
+    'download_excel' => [
+        'enabled' => false,
+        'filename' => 'docs.xlsx',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the CSV documentation.
+     */
+    'download_csv' => [
+        'enabled' => false,
+        'filename' => 'docs.csv',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the XML documentation.
+     */
+    'download_xml' => [
+        'enabled' => false,
+        'filename' => 'docs.xml',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the YAML documentation.
+     */
+    'download_yaml' => [
+        'enabled' => false,
+        'filename' => 'docs.yaml',
+    ],
+
+    /*
+     * Whether to show the "Download" button for the JSON documentation.
+     */
+    'download_json' => [
+        'enabled' => false,
+        'filename' => 'docs.json',
+    ],
+];
+

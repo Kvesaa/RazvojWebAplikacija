@@ -1,0 +1,129 @@
+name: Authentication
+description: |-
+
+  APIs for handling authentication including Google OAuth2 and token management.
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/token
+    metadata:
+      groupName: Authentication
+      groupDescription: |-
+
+        APIs for handling authentication including Google OAuth2 and token management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create Sanctum token from credentials'
+      description: 'Creates a Sanctum personal access token using email/password credentials.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'User email address.'
+        required: true
+        example: admin@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'User password.'
+        required: true
+        example: password
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      device_name:
+        name: device_name
+        description: 'Device name for the token.'
+        required: true
+        example: dev
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: admin@example.com
+      password: password
+      device_name: dev
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "token": "1|abc123def456..."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "message": "Invalid credentials"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: api/token
+    metadata:
+      groupName: Authentication
+      groupDescription: |-
+
+        APIs for handling authentication including Google OAuth2 and token management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Revoke current token'
+      description: 'Revokes the current Sanctum token.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Token revoked successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

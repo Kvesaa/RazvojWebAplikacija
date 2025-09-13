@@ -1,0 +1,5107 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: 'Aviation Management API Documentation'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://127.0.0.1:8000'
+paths:
+  /api/v1/airline:
+    get:
+      summary: 'List all airlines'
+      operationId: listAllAirlines
+      description: 'Get a list of all airlines in the system.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      iata: AA
+                      airlinename: 'American Airlines'
+                      base_airport: 1
+                      created_at: '2023-01-01T00:00:00.000000Z'
+                      updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        iata: AA
+                        airlinename: 'American Airlines'
+                        base_airport: 1
+                        created_at: '2023-01-01T00:00:00.000000Z'
+                        updated_at: '2023-01-01T00:00:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        iata:
+                          type: string
+                          example: AA
+                        airlinename:
+                          type: string
+                          example: 'American Airlines'
+                        base_airport:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+      tags:
+        - 'Airline Management'
+      security: []
+    post:
+      summary: 'Create a new airline'
+      operationId: createANewAirline
+      description: 'Create a new airline with the provided information.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: AA
+                  airlinename: 'American Airlines'
+                  base_airport: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: AA
+                  airlinename:
+                    type: string
+                    example: 'American Airlines'
+                  base_airport:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    iata:
+                      - 'The iata field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      iata:
+                        type: array
+                        example:
+                          - 'The iata field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Airline Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (2 characters).'
+                  example: AA
+                  nullable: false
+                airlinename:
+                  type: string
+                  description: 'The airline name.'
+                  example: 'American Airlines'
+                  nullable: false
+                base_airport:
+                  type: integer
+                  description: 'The ID of the base airport.'
+                  example: 1
+                  nullable: false
+              required:
+                - iata
+                - airlinename
+                - base_airport
+      security: []
+  '/api/v1/airline/{id}':
+    get:
+      summary: 'Show a specific airline'
+      operationId: showASpecificAirline
+      description: 'Get details of a specific airline by ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: AA
+                  airlinename: 'American Airlines'
+                  base_airport: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: AA
+                  airlinename:
+                    type: string
+                    example: 'American Airlines'
+                  base_airport:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airline] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airline] 1'
+      tags:
+        - 'Airline Management'
+      security: []
+    put:
+      summary: 'Update an airline'
+      operationId: updateAnAirline
+      description: "Update an existing airline's information."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: AA
+                  airlinename: 'American Airlines'
+                  base_airport: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: AA
+                  airlinename:
+                    type: string
+                    example: 'American Airlines'
+                  base_airport:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airline] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airline] 1'
+      tags:
+        - 'Airline Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (2 characters).'
+                  example: AA
+                  nullable: false
+                airlinename:
+                  type: string
+                  description: 'The airline name.'
+                  example: 'American Airlines'
+                  nullable: false
+                base_airport:
+                  type: integer
+                  description: 'The ID of the base airport.'
+                  example: 1
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete an airline'
+      operationId: deleteAnAirline
+      description: 'Remove an airline from the system.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airline] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airline] 1'
+      tags:
+        - 'Airline Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airline.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v2/airline:
+    get:
+      summary: 'List all airlines'
+      operationId: listAllAirlines
+      description: 'Get a list of all airlines in the system.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      iata: AA
+                      airlinename: 'American Airlines'
+                      base_airport: 1
+                      created_at: '2023-01-01T00:00:00.000000Z'
+                      updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        iata: AA
+                        airlinename: 'American Airlines'
+                        base_airport: 1
+                        created_at: '2023-01-01T00:00:00.000000Z'
+                        updated_at: '2023-01-01T00:00:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        iata:
+                          type: string
+                          example: AA
+                        airlinename:
+                          type: string
+                          example: 'American Airlines'
+                        base_airport:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+      tags:
+        - 'Airline Management'
+      security: []
+    post:
+      summary: 'Create a new airline'
+      operationId: createANewAirline
+      description: 'Create a new airline with the provided information.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: AA
+                  airlinename: 'American Airlines'
+                  base_airport: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: AA
+                  airlinename:
+                    type: string
+                    example: 'American Airlines'
+                  base_airport:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    iata:
+                      - 'The iata field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      iata:
+                        type: array
+                        example:
+                          - 'The iata field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Airline Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (2 characters).'
+                  example: AA
+                  nullable: false
+                airlinename:
+                  type: string
+                  description: 'The airline name.'
+                  example: 'American Airlines'
+                  nullable: false
+                base_airport:
+                  type: integer
+                  description: 'The ID of the base airport.'
+                  example: 1
+                  nullable: false
+              required:
+                - iata
+                - airlinename
+                - base_airport
+      security: []
+  '/api/v2/airline/{id}':
+    get:
+      summary: 'Show a specific airline'
+      operationId: showASpecificAirline
+      description: 'Get details of a specific airline by ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: AA
+                  airlinename: 'American Airlines'
+                  base_airport: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: AA
+                  airlinename:
+                    type: string
+                    example: 'American Airlines'
+                  base_airport:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airline] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airline] 1'
+      tags:
+        - 'Airline Management'
+      security: []
+    put:
+      summary: 'Update an airline'
+      operationId: updateAnAirline
+      description: "Update an existing airline's information."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: AA
+                  airlinename: 'American Airlines'
+                  base_airport: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: AA
+                  airlinename:
+                    type: string
+                    example: 'American Airlines'
+                  base_airport:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airline] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airline] 1'
+      tags:
+        - 'Airline Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (2 characters).'
+                  example: AA
+                  nullable: false
+                airlinename:
+                  type: string
+                  description: 'The airline name.'
+                  example: 'American Airlines'
+                  nullable: false
+                base_airport:
+                  type: integer
+                  description: 'The ID of the base airport.'
+                  example: 1
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete an airline'
+      operationId: deleteAnAirline
+      description: 'Remove an airline from the system.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airline] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airline] 1'
+      tags:
+        - 'Airline Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airline.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/airport:
+    get:
+      summary: 'List all airports'
+      operationId: listAllAirports
+      description: 'Get a list of all airports in the system.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      iata: LAX
+                      icao: KLAX
+                      name: 'Los Angeles International Airport'
+                      created_at: '2023-01-01T00:00:00.000000Z'
+                      updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        iata: LAX
+                        icao: KLAX
+                        name: 'Los Angeles International Airport'
+                        created_at: '2023-01-01T00:00:00.000000Z'
+                        updated_at: '2023-01-01T00:00:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        iata:
+                          type: string
+                          example: LAX
+                        icao:
+                          type: string
+                          example: KLAX
+                        name:
+                          type: string
+                          example: 'Los Angeles International Airport'
+                        created_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+      tags:
+        - 'Airport Management'
+      security: []
+    post:
+      summary: 'Create a new airport'
+      operationId: createANewAirport
+      description: 'Create a new airport with the provided information.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: LAX
+                  icao: KLAX
+                  name: 'Los Angeles International Airport'
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: LAX
+                  icao:
+                    type: string
+                    example: KLAX
+                  name:
+                    type: string
+                    example: 'Los Angeles International Airport'
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    iata:
+                      - 'The iata field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      iata:
+                        type: array
+                        example:
+                          - 'The iata field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Airport Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (3 characters).'
+                  example: LAX
+                  nullable: false
+                icao:
+                  type: string
+                  description: 'The ICAO code (4 characters).'
+                  example: KLAX
+                  nullable: false
+                name:
+                  type: string
+                  description: 'The airport name.'
+                  example: 'Los Angeles International Airport'
+                  nullable: false
+              required:
+                - iata
+                - icao
+                - name
+      security: []
+  '/api/v1/airport/{id}':
+    get:
+      summary: 'Show a specific airport'
+      operationId: showASpecificAirport
+      description: 'Get details of a specific airport by ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: LAX
+                  icao: KLAX
+                  name: 'Los Angeles International Airport'
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: LAX
+                  icao:
+                    type: string
+                    example: KLAX
+                  name:
+                    type: string
+                    example: 'Los Angeles International Airport'
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airport] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airport] 1'
+      tags:
+        - 'Airport Management'
+      security: []
+    put:
+      summary: 'Update an airport'
+      operationId: updateAnAirport
+      description: "Update an existing airport's information."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: LAX
+                  icao: KLAX
+                  name: 'Los Angeles International Airport'
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: LAX
+                  icao:
+                    type: string
+                    example: KLAX
+                  name:
+                    type: string
+                    example: 'Los Angeles International Airport'
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airport] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airport] 1'
+      tags:
+        - 'Airport Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (3 characters).'
+                  example: LAX
+                  nullable: false
+                icao:
+                  type: string
+                  description: 'The ICAO code (4 characters).'
+                  example: KLAX
+                  nullable: false
+                name:
+                  type: string
+                  description: 'The airport name.'
+                  example: 'Los Angeles International Airport'
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete an airport'
+      operationId: deleteAnAirport
+      description: 'Remove an airport from the system.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airport] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airport] 1'
+      tags:
+        - 'Airport Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airport.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v2/airport:
+    get:
+      summary: 'List all airports'
+      operationId: listAllAirports
+      description: 'Get a list of all airports in the system.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      iata: LAX
+                      icao: KLAX
+                      name: 'Los Angeles International Airport'
+                      created_at: '2023-01-01T00:00:00.000000Z'
+                      updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        iata: LAX
+                        icao: KLAX
+                        name: 'Los Angeles International Airport'
+                        created_at: '2023-01-01T00:00:00.000000Z'
+                        updated_at: '2023-01-01T00:00:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        iata:
+                          type: string
+                          example: LAX
+                        icao:
+                          type: string
+                          example: KLAX
+                        name:
+                          type: string
+                          example: 'Los Angeles International Airport'
+                        created_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+      tags:
+        - 'Airport Management'
+      security: []
+    post:
+      summary: 'Create a new airport'
+      operationId: createANewAirport
+      description: 'Create a new airport with the provided information.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: LAX
+                  icao: KLAX
+                  name: 'Los Angeles International Airport'
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: LAX
+                  icao:
+                    type: string
+                    example: KLAX
+                  name:
+                    type: string
+                    example: 'Los Angeles International Airport'
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    iata:
+                      - 'The iata field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      iata:
+                        type: array
+                        example:
+                          - 'The iata field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Airport Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (3 characters).'
+                  example: LAX
+                  nullable: false
+                icao:
+                  type: string
+                  description: 'The ICAO code (4 characters).'
+                  example: KLAX
+                  nullable: false
+                name:
+                  type: string
+                  description: 'The airport name.'
+                  example: 'Los Angeles International Airport'
+                  nullable: false
+              required:
+                - iata
+                - icao
+                - name
+      security: []
+  '/api/v2/airport/{id}':
+    get:
+      summary: 'Show a specific airport'
+      operationId: showASpecificAirport
+      description: 'Get details of a specific airport by ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: LAX
+                  icao: KLAX
+                  name: 'Los Angeles International Airport'
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: LAX
+                  icao:
+                    type: string
+                    example: KLAX
+                  name:
+                    type: string
+                    example: 'Los Angeles International Airport'
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airport] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airport] 1'
+      tags:
+        - 'Airport Management'
+      security: []
+    put:
+      summary: 'Update an airport'
+      operationId: updateAnAirport
+      description: "Update an existing airport's information."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  iata: LAX
+                  icao: KLAX
+                  name: 'Los Angeles International Airport'
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  iata:
+                    type: string
+                    example: LAX
+                  icao:
+                    type: string
+                    example: KLAX
+                  name:
+                    type: string
+                    example: 'Los Angeles International Airport'
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airport] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airport] 1'
+      tags:
+        - 'Airport Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iata:
+                  type: string
+                  description: 'The IATA code (3 characters).'
+                  example: LAX
+                  nullable: false
+                icao:
+                  type: string
+                  description: 'The ICAO code (4 characters).'
+                  example: KLAX
+                  nullable: false
+                name:
+                  type: string
+                  description: 'The airport name.'
+                  example: 'Los Angeles International Airport'
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete an airport'
+      operationId: deleteAnAirport
+      description: 'Remove an airport from the system.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Airport] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Airport] 1'
+      tags:
+        - 'Airport Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airport.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/token:
+    post:
+      summary: 'Create Sanctum token from credentials'
+      operationId: createSanctumTokenFromCredentials
+      description: 'Creates a Sanctum personal access token using email/password credentials.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  token: 1|abc123def456...
+                properties:
+                  token:
+                    type: string
+                    example: 1|abc123def456...
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials'
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'User email address.'
+                  example: admin@example.com
+                  nullable: false
+                password:
+                  type: string
+                  description: 'User password.'
+                  example: password
+                  nullable: false
+                device_name:
+                  type: string
+                  description: 'Device name for the token.'
+                  example: dev
+                  nullable: false
+              required:
+                - email
+                - password
+                - device_name
+      security: []
+    delete:
+      summary: 'Revoke current token'
+      operationId: revokeCurrentToken
+      description: 'Revokes the current Sanctum token.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Token revoked successfully'
+                properties:
+                  message:
+                    type: string
+                    example: 'Token revoked successfully'
+      tags:
+        - Authentication
+      security: []
+  /api/user:
+    get:
+      summary: ''
+      operationId: getApiUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/airport-geo:
+    get:
+      summary: ''
+      operationId: getApiV1AirportGeo
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1AirportGeo
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: s
+                  nullable: false
+                city:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: qkhrqygmk
+                  nullable: false
+                country:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: scqps
+                  nullable: false
+                latitude:
+                  type: number
+                  description: ''
+                  example: 633141953.0
+                  nullable: false
+                longitude:
+                  type: number
+                  description: ''
+                  example: 245270.75969362
+                  nullable: false
+                geolocation:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+              required:
+                - name
+                - city
+                - country
+                - latitude
+                - longitude
+      security: []
+  '/api/v1/airport-geo/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1AirportGeoId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1AirportGeoId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1AirportGeoId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airport geo.'
+        example: ullam
+        required: true
+        schema:
+          type: string
+  /api/v1/airport-reachable:
+    get:
+      summary: ''
+      operationId: getApiV1AirportReachable
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1AirportReachable
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                airport_id:
+                  type: integer
+                  description: ''
+                  example: 8
+                  nullable: false
+                hops:
+                  type: integer
+                  description: ''
+                  example: 2
+                  nullable: false
+              required:
+                - airport_id
+                - hops
+      security: []
+  '/api/v1/airport-reachable/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1AirportReachableId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1AirportReachableId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1AirportReachableId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airport reachable.'
+        example: aut
+        required: true
+        schema:
+          type: string
+  /api/v1/airplane:
+    get:
+      summary: ''
+      operationId: getApiV1Airplane
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1Airplane
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                capacity:
+                  type: integer
+                  description: ''
+                  example: 7
+                  nullable: false
+                type_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: ''
+                  example: 5
+                  nullable: false
+              required:
+                - capacity
+                - type_id
+                - airline_id
+      security: []
+  '/api/v1/airplane/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1AirplaneId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1AirplaneId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1AirplaneId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airplane.'
+        example: id
+        required: true
+        schema:
+          type: string
+  /api/v1/airplane-types:
+    get:
+      summary: ''
+      operationId: getApiV1AirplaneTypes
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1AirplaneTypes
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'Must not be greater than 8 characters.'
+                  example: ztrtmsm
+                  nullable: false
+                description:
+                  type: string
+                  description: ''
+                  example: 'Ut rerum laudantium esse molestiae esse.'
+                  nullable: false
+              required:
+                - identifier
+                - description
+      security: []
+  '/api/v1/airplane-types/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1AirplaneTypesId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1AirplaneTypesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1AirplaneTypesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airplane type.'
+        example: et
+        required: true
+        schema:
+          type: string
+  /api/v1/flight-schedules:
+    get:
+      summary: ''
+      operationId: getApiV1FlightSchedules
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1FlightSchedules
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightno:
+                  type: string
+                  description: 'Must not be greater than 8 characters.'
+                  example: ylz
+                  nullable: false
+                from:
+                  type: integer
+                  description: ''
+                  example: 1
+                  nullable: false
+                to:
+                  type: integer
+                  description: ''
+                  example: 19
+                  nullable: false
+                departure:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '12:45:02'
+                  nullable: false
+                arrival:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '12:45:02'
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: ''
+                  example: 4
+                  nullable: false
+                monday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                tuesday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                wednesday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                thursday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                friday:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: false
+                saturday:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: false
+                sunday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+              required:
+                - flightno
+                - from
+                - to
+                - departure
+                - arrival
+                - airline_id
+                - monday
+                - tuesday
+                - wednesday
+                - thursday
+                - friday
+                - saturday
+                - sunday
+      security: []
+  '/api/v1/flight-schedules/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1FlightSchedulesId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1FlightSchedulesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1FlightSchedulesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the flight schedule.'
+        example: laudantium
+        required: true
+        schema:
+          type: string
+  /api/v1/employee:
+    get:
+      summary: ''
+      operationId: getApiV1Employee
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1Employee
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: pdaverdphglt
+                  nullable: false
+                lastname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: yuuammlhpkjmvtd
+                  nullable: false
+                birthdate:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:02'
+                  nullable: false
+                sex:
+                  type: string
+                  description: 'Must not be greater than 1 character.'
+                  example: v
+                  nullable: false
+                street:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: swxkxoybpumxkdaw
+                  nullable: false
+                zip:
+                  type: integer
+                  description: ''
+                  example: 16
+                  nullable: false
+                city:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: vnie
+                  nullable: false
+                emailaddress:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 120 characters.'
+                  example: jzeh
+                  nullable: false
+                telephone:
+                  type: string
+                  description: 'Must not be greater than 30 characters.'
+                  example: xgfhfdweezllaafojo
+                  nullable: false
+                salary:
+                  type: number
+                  description: ''
+                  example: 54928723.0
+                  nullable: false
+                username:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: hixdkpgffucxfezsyv
+                  nullable: false
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: "C']PC&Ke>{'xa"
+                  nullable: false
+              required:
+                - firstname
+                - lastname
+                - birthdate
+                - sex
+                - street
+                - zip
+                - city
+                - emailaddress
+                - telephone
+                - salary
+                - username
+                - password
+      security: []
+  '/api/v1/employee/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1EmployeeId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1EmployeeId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1EmployeeId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the employee.'
+        example: autem
+        required: true
+        schema:
+          type: string
+  /api/v1/passengers:
+    get:
+      summary: ''
+      operationId: getApiV1Passengers
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1Passengers
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passportno:
+                  type: string
+                  description: 'Must not be greater than 9 characters.'
+                  example: c
+                  nullable: false
+                firstname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: sxtrapigqvnjnvkxn
+                  nullable: false
+                lastname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: nqm
+                  nullable: false
+              required:
+                - passportno
+                - firstname
+                - lastname
+      security: []
+  '/api/v1/passengers/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1PassengersId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1PassengersId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1PassengersId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the passenger.'
+        example: eveniet
+        required: true
+        schema:
+          type: string
+  /api/v1/passenger-details:
+    get:
+      summary: ''
+      operationId: getApiV1PassengerDetails
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1PassengerDetails
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passenger_id:
+                  type: integer
+                  description: ''
+                  example: 20
+                  nullable: false
+                birthdate:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                sex:
+                  type: string
+                  description: 'Must not be greater than 1 character.'
+                  example: j
+                  nullable: false
+                street:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: jtokzp
+                  nullable: false
+                city:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: drjlqxwxalysccjxgngppqfv
+                  nullable: false
+                zip:
+                  type: integer
+                  description: ''
+                  example: 19
+                  nullable: false
+                country:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: tppglylzrmqzllpficvgr
+                  nullable: false
+                emailaddress:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 120 characters.'
+                  example: v
+                  nullable: false
+                telephone:
+                  type: string
+                  description: 'Must not be greater than 30 characters.'
+                  example: gvclmumdhmtwcmgceamrmen
+                  nullable: false
+              required:
+                - passenger_id
+                - birthdate
+                - sex
+                - street
+                - city
+                - zip
+                - country
+                - emailaddress
+                - telephone
+      security: []
+  '/api/v1/passenger-details/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1PassengerDetailsId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1PassengerDetailsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1PassengerDetailsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the passenger detail.'
+        example: ab
+        required: true
+        schema:
+          type: string
+  /api/v1/booking:
+    get:
+      summary: ''
+      operationId: getApiV1Booking
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1Booking
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flight_id:
+                  type: integer
+                  description: ''
+                  example: 7
+                  nullable: false
+                seat:
+                  type: string
+                  description: 'Must not be greater than 4 characters.'
+                  example: u
+                  nullable: false
+                passenger_id:
+                  type: integer
+                  description: ''
+                  example: 9
+                  nullable: false
+                price:
+                  type: number
+                  description: ''
+                  example: 23.102234
+                  nullable: false
+              required:
+                - flight_id
+                - seat
+                - passenger_id
+                - price
+      security: []
+  '/api/v1/booking/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1BookingId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1BookingId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1BookingId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the booking.'
+        example: ut
+        required: true
+        schema:
+          type: string
+  /api/v1/flight-log:
+    get:
+      summary: ''
+      operationId: getApiV1FlightLog
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1FlightLog
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                log_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                user:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: zfklmwmgqermo
+                  nullable: false
+                flightno:
+                  type: string
+                  description: 'Must not be greater than 8 characters.'
+                  example: de
+                  nullable: false
+                from_old:
+                  type: integer
+                  description: ''
+                  example: 2
+                  nullable: false
+                to_old:
+                  type: integer
+                  description: ''
+                  example: 9
+                  nullable: false
+                from_new:
+                  type: integer
+                  description: ''
+                  example: 15
+                  nullable: false
+                to_new:
+                  type: integer
+                  description: ''
+                  example: 2
+                  nullable: false
+                departure_old:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                arrival_old:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                departure_new:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                arrival_new:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                airplane_id_old:
+                  type: integer
+                  description: ''
+                  example: 9
+                  nullable: false
+                airplane_id_new:
+                  type: integer
+                  description: ''
+                  example: 9
+                  nullable: false
+                airline_id_old:
+                  type: integer
+                  description: ''
+                  example: 2
+                  nullable: false
+                airline_id_new:
+                  type: integer
+                  description: ''
+                  example: 9
+                  nullable: false
+                comment:
+                  type: string
+                  description: 'Must not be greater than 200 characters.'
+                  example: bmplxu
+                  nullable: true
+              required:
+                - log_date
+                - user
+                - flightno
+                - from_old
+                - to_old
+                - from_new
+                - to_new
+                - departure_old
+                - arrival_old
+                - departure_new
+                - arrival_new
+                - airplane_id_old
+                - airplane_id_new
+                - airline_id_old
+                - airline_id_new
+      security: []
+  '/api/v1/flight-log/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1FlightLogId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1FlightLogId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1FlightLogId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the flight log.'
+        example: autem
+        required: true
+        schema:
+          type: string
+  /api/v1/weather-data:
+    get:
+      summary: ''
+      operationId: getApiV1WeatherData
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1WeatherData
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                log_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:03'
+                  nullable: false
+                time:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '12:45:03'
+                  nullable: false
+                station:
+                  type: string
+                  description: 'Must not be greater than 11 characters.'
+                  example: vvvuesdjacg
+                  nullable: false
+                temp:
+                  type: number
+                  description: ''
+                  example: 63549509.48838
+                  nullable: false
+                humidity:
+                  type: number
+                  description: ''
+                  example: 3.42
+                  nullable: false
+                airpressure:
+                  type: number
+                  description: ''
+                  example: 309252.0268989
+                  nullable: false
+                windspeed:
+                  type: number
+                  description: ''
+                  example: 1.32974758
+                  nullable: false
+                weather:
+                  type: string
+                  description: ''
+                  example: storm
+                  nullable: false
+                  enum:
+                    - sunny
+                    - rain
+                    - snow
+                    - fog
+                    - storm
+                winddirection:
+                  type: integer
+                  description: ''
+                  example: 3
+                  nullable: false
+              required:
+                - log_date
+                - time
+                - station
+                - temp
+                - humidity
+                - airpressure
+                - windspeed
+                - weather
+                - winddirection
+      security: []
+  '/api/v1/weather-data/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1WeatherDataId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid credentials.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid credentials.'
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1WeatherDataId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1WeatherDataId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the weather datum.'
+        example: qui
+        required: true
+        schema:
+          type: string
+  /api/v2/airport-geo:
+    get:
+      summary: ''
+      operationId: getApiV2AirportGeo
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2AirportGeo
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: srpauvbhygssrgjq
+                  nullable: false
+                city:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: geldcbyolvfedwftajgx
+                  nullable: false
+                country:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: xlbip
+                  nullable: false
+                latitude:
+                  type: number
+                  description: ''
+                  example: 720.4
+                  nullable: false
+                longitude:
+                  type: number
+                  description: ''
+                  example: 274010.797464
+                  nullable: false
+                geolocation:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+              required:
+                - name
+                - city
+                - country
+                - latitude
+                - longitude
+      security: []
+  '/api/v2/airport-geo/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2AirportGeoId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2AirportGeoId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2AirportGeoId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airport geo.'
+        example: ipsa
+        required: true
+        schema:
+          type: string
+  /api/v2/airport-reachable:
+    get:
+      summary: ''
+      operationId: getApiV2AirportReachable
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2AirportReachable
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                airport_id:
+                  type: integer
+                  description: ''
+                  example: 18
+                  nullable: false
+                hops:
+                  type: integer
+                  description: ''
+                  example: 6
+                  nullable: false
+              required:
+                - airport_id
+                - hops
+      security: []
+  '/api/v2/airport-reachable/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2AirportReachableId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2AirportReachableId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2AirportReachableId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airport reachable.'
+        example: ea
+        required: true
+        schema:
+          type: string
+  /api/v2/airplane:
+    get:
+      summary: ''
+      operationId: getApiV2Airplane
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2Airplane
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                capacity:
+                  type: integer
+                  description: ''
+                  example: 7
+                  nullable: false
+                type_id:
+                  type: integer
+                  description: ''
+                  example: 14
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: ''
+                  example: 18
+                  nullable: false
+              required:
+                - capacity
+                - type_id
+                - airline_id
+      security: []
+  '/api/v2/airplane/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2AirplaneId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2AirplaneId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2AirplaneId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airplane.'
+        example: ad
+        required: true
+        schema:
+          type: string
+  /api/v2/airplane-types:
+    get:
+      summary: ''
+      operationId: getApiV2AirplaneTypes
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2AirplaneTypes
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: 'Must not be greater than 8 characters.'
+                  example: sed
+                  nullable: false
+                description:
+                  type: string
+                  description: ''
+                  example: 'Quia tenetur ea est.'
+                  nullable: false
+              required:
+                - identifier
+                - description
+      security: []
+  '/api/v2/airplane-types/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2AirplaneTypesId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2AirplaneTypesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2AirplaneTypesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the airplane type.'
+        example: doloribus
+        required: true
+        schema:
+          type: string
+  /api/v2/flight-schedules:
+    get:
+      summary: ''
+      operationId: getApiV2FlightSchedules
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2FlightSchedules
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightno:
+                  type: string
+                  description: 'Must not be greater than 8 characters.'
+                  example: wexmhllm
+                  nullable: false
+                from:
+                  type: integer
+                  description: ''
+                  example: 7
+                  nullable: false
+                to:
+                  type: integer
+                  description: ''
+                  example: 16
+                  nullable: false
+                departure:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '12:45:04'
+                  nullable: false
+                arrival:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '12:45:04'
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: ''
+                  example: 13
+                  nullable: false
+                monday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                tuesday:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: false
+                wednesday:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: false
+                thursday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                friday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                saturday:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                sunday:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: false
+              required:
+                - flightno
+                - from
+                - to
+                - departure
+                - arrival
+                - airline_id
+                - monday
+                - tuesday
+                - wednesday
+                - thursday
+                - friday
+                - saturday
+                - sunday
+      security: []
+  '/api/v2/flight-schedules/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2FlightSchedulesId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2FlightSchedulesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2FlightSchedulesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the flight schedule.'
+        example: sit
+        required: true
+        schema:
+          type: string
+  /api/v2/employee:
+    get:
+      summary: ''
+      operationId: getApiV2Employee
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2Employee
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: mdedjqloucixhchkzsppu
+                  nullable: false
+                lastname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: eacvugdczihyq
+                  nullable: false
+                birthdate:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                sex:
+                  type: string
+                  description: 'Must not be greater than 1 character.'
+                  example: i
+                  nullable: false
+                street:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: dvmujndfnvdkuorjpexnw
+                  nullable: false
+                zip:
+                  type: integer
+                  description: ''
+                  example: 5
+                  nullable: false
+                city:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: buufysawpweuxeebxz
+                  nullable: false
+                emailaddress:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 120 characters.'
+                  example: w
+                  nullable: false
+                telephone:
+                  type: string
+                  description: 'Must not be greater than 30 characters.'
+                  example: maciytmyrk
+                  nullable: false
+                salary:
+                  type: number
+                  description: ''
+                  example: 165427686.0
+                  nullable: false
+                username:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: mdqfabrhjxwyqcisop
+                  nullable: false
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: 'rY~EbkwH*CdIDH'
+                  nullable: false
+              required:
+                - firstname
+                - lastname
+                - birthdate
+                - sex
+                - street
+                - zip
+                - city
+                - emailaddress
+                - telephone
+                - salary
+                - username
+                - password
+      security: []
+  '/api/v2/employee/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2EmployeeId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2EmployeeId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2EmployeeId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the employee.'
+        example: sapiente
+        required: true
+        schema:
+          type: string
+  /api/v2/passengers:
+    get:
+      summary: ''
+      operationId: getApiV2Passengers
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2Passengers
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passportno:
+                  type: string
+                  description: 'Must not be greater than 9 characters.'
+                  example: kgth
+                  nullable: false
+                firstname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: owxhcktwjbzpaabeebnam
+                  nullable: false
+                lastname:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: aspaqhewnekdqrfojgyvrjoc
+                  nullable: false
+              required:
+                - passportno
+                - firstname
+                - lastname
+      security: []
+  '/api/v2/passengers/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2PassengersId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2PassengersId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2PassengersId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the passenger.'
+        example: iste
+        required: true
+        schema:
+          type: string
+  /api/v2/passenger-details:
+    get:
+      summary: ''
+      operationId: getApiV2PassengerDetails
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2PassengerDetails
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passenger_id:
+                  type: integer
+                  description: ''
+                  example: 12
+                  nullable: false
+                birthdate:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                sex:
+                  type: string
+                  description: 'Must not be greater than 1 character.'
+                  example: z
+                  nullable: false
+                street:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: rhpslxjhvaynxprq
+                  nullable: false
+                city:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: mspgxqgcvrdhgmiesfmjd
+                  nullable: false
+                zip:
+                  type: integer
+                  description: ''
+                  example: 4
+                  nullable: false
+                country:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: ycyvbvygvgrclamjchiogne
+                  nullable: false
+                emailaddress:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 120 characters.'
+                  example: bm
+                  nullable: false
+                telephone:
+                  type: string
+                  description: 'Must not be greater than 30 characters.'
+                  example: pcocrbexhlajtxyow
+                  nullable: false
+              required:
+                - passenger_id
+                - birthdate
+                - sex
+                - street
+                - city
+                - zip
+                - country
+                - emailaddress
+                - telephone
+      security: []
+  '/api/v2/passenger-details/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2PassengerDetailsId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2PassengerDetailsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2PassengerDetailsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the passenger detail.'
+        example: soluta
+        required: true
+        schema:
+          type: string
+  /api/v2/booking:
+    get:
+      summary: ''
+      operationId: getApiV2Booking
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2Booking
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flight_id:
+                  type: integer
+                  description: ''
+                  example: 3
+                  nullable: false
+                seat:
+                  type: string
+                  description: 'Must not be greater than 4 characters.'
+                  example: wwy
+                  nullable: false
+                passenger_id:
+                  type: integer
+                  description: ''
+                  example: 20
+                  nullable: false
+                price:
+                  type: number
+                  description: ''
+                  example: 5688.4399
+                  nullable: false
+              required:
+                - flight_id
+                - seat
+                - passenger_id
+                - price
+      security: []
+  '/api/v2/booking/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2BookingId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2BookingId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2BookingId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the booking.'
+        example: voluptas
+        required: true
+        schema:
+          type: string
+  /api/v2/flight-log:
+    get:
+      summary: ''
+      operationId: getApiV2FlightLog
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2FlightLog
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                log_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                user:
+                  type: string
+                  description: 'Must not be greater than 100 characters.'
+                  example: putkdxlhm
+                  nullable: false
+                flightno:
+                  type: string
+                  description: 'Must not be greater than 8 characters.'
+                  example: eqru
+                  nullable: false
+                from_old:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                to_old:
+                  type: integer
+                  description: ''
+                  example: 13
+                  nullable: false
+                from_new:
+                  type: integer
+                  description: ''
+                  example: 5
+                  nullable: false
+                to_new:
+                  type: integer
+                  description: ''
+                  example: 8
+                  nullable: false
+                departure_old:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                arrival_old:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                departure_new:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                arrival_new:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                airplane_id_old:
+                  type: integer
+                  description: ''
+                  example: 8
+                  nullable: false
+                airplane_id_new:
+                  type: integer
+                  description: ''
+                  example: 4
+                  nullable: false
+                airline_id_old:
+                  type: integer
+                  description: ''
+                  example: 13
+                  nullable: false
+                airline_id_new:
+                  type: integer
+                  description: ''
+                  example: 12
+                  nullable: false
+                comment:
+                  type: string
+                  description: 'Must not be greater than 200 characters.'
+                  example: egkah
+                  nullable: true
+              required:
+                - log_date
+                - user
+                - flightno
+                - from_old
+                - to_old
+                - from_new
+                - to_new
+                - departure_old
+                - arrival_old
+                - departure_new
+                - arrival_new
+                - airplane_id_old
+                - airplane_id_new
+                - airline_id_old
+                - airline_id_new
+      security: []
+  '/api/v2/flight-log/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2FlightLogId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2FlightLogId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2FlightLogId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the flight log.'
+        example: rerum
+        required: true
+        schema:
+          type: string
+  /api/v2/weather-data:
+    get:
+      summary: ''
+      operationId: getApiV2WeatherData
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV2WeatherData
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                log_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-13T12:45:04'
+                  nullable: false
+                time:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '12:45:04'
+                  nullable: false
+                station:
+                  type: string
+                  description: 'Must not be greater than 11 characters.'
+                  example: hoss
+                  nullable: false
+                temp:
+                  type: number
+                  description: ''
+                  example: 371531.6528142
+                  nullable: false
+                humidity:
+                  type: number
+                  description: ''
+                  example: 1955189.231
+                  nullable: false
+                airpressure:
+                  type: number
+                  description: ''
+                  example: 48388521.756239
+                  nullable: false
+                windspeed:
+                  type: number
+                  description: ''
+                  example: 29861.663
+                  nullable: false
+                weather:
+                  type: string
+                  description: ''
+                  example: sunny
+                  nullable: false
+                  enum:
+                    - sunny
+                    - rain
+                    - snow
+                    - fog
+                    - storm
+                winddirection:
+                  type: integer
+                  description: ''
+                  example: 6
+                  nullable: false
+              required:
+                - log_date
+                - time
+                - station
+                - temp
+                - humidity
+                - airpressure
+                - windspeed
+                - weather
+                - winddirection
+      security: []
+  '/api/v2/weather-data/{id}':
+    get:
+      summary: ''
+      operationId: getApiV2WeatherDataId
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV2WeatherDataId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV2WeatherDataId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the weather datum.'
+        example: quibusdam
+        required: true
+        schema:
+          type: string
+  /api/v1/flights:
+    get:
+      summary: 'List all flights'
+      operationId: listAllFlights
+      description: 'Get a list of all flights in the system.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      flightno: AA100
+                      from: 1
+                      to: 2
+                      departure: '2023-01-01T10:00:00.000000Z'
+                      arrival: '2023-01-01T14:00:00.000000Z'
+                      airline_id: 1
+                      airplane_id: 1
+                      created_at: '2023-01-01T00:00:00.000000Z'
+                      updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        flightno: AA100
+                        from: 1
+                        to: 2
+                        departure: '2023-01-01T10:00:00.000000Z'
+                        arrival: '2023-01-01T14:00:00.000000Z'
+                        airline_id: 1
+                        airplane_id: 1
+                        created_at: '2023-01-01T00:00:00.000000Z'
+                        updated_at: '2023-01-01T00:00:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        flightno:
+                          type: string
+                          example: AA100
+                        from:
+                          type: integer
+                          example: 1
+                        to:
+                          type: integer
+                          example: 2
+                        departure:
+                          type: string
+                          example: '2023-01-01T10:00:00.000000Z'
+                        arrival:
+                          type: string
+                          example: '2023-01-01T14:00:00.000000Z'
+                        airline_id:
+                          type: integer
+                          example: 1
+                        airplane_id:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+      tags:
+        - 'Flight Management'
+      security: []
+    post:
+      summary: 'Create a new flight'
+      operationId: createANewFlight
+      description: 'Create a new flight with the provided information.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  flightno: AA100
+                  from: 1
+                  to: 2
+                  departure: '2023-01-01T10:00:00.000000Z'
+                  arrival: '2023-01-01T14:00:00.000000Z'
+                  airline_id: 1
+                  airplane_id: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  flightno:
+                    type: string
+                    example: AA100
+                  from:
+                    type: integer
+                    example: 1
+                  to:
+                    type: integer
+                    example: 2
+                  departure:
+                    type: string
+                    example: '2023-01-01T10:00:00.000000Z'
+                  arrival:
+                    type: string
+                    example: '2023-01-01T14:00:00.000000Z'
+                  airline_id:
+                    type: integer
+                    example: 1
+                  airplane_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    flightno:
+                      - 'The flightno field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      flightno:
+                        type: array
+                        example:
+                          - 'The flightno field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Flight Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightno:
+                  type: string
+                  description: 'The flight number.'
+                  example: AA100
+                  nullable: false
+                from:
+                  type: integer
+                  description: 'The departure airport ID.'
+                  example: 1
+                  nullable: false
+                to:
+                  type: integer
+                  description: 'The arrival airport ID.'
+                  example: 2
+                  nullable: false
+                departure:
+                  type: string
+                  description: 'The departure date and time.'
+                  example: '2023-01-01 10:00:00'
+                  nullable: false
+                arrival:
+                  type: string
+                  description: 'The arrival date and time.'
+                  example: '2023-01-01 14:00:00'
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: 'The airline ID.'
+                  example: 1
+                  nullable: false
+                airplane_id:
+                  type: integer
+                  description: 'The airplane ID.'
+                  example: 1
+                  nullable: false
+              required:
+                - flightno
+                - from
+                - to
+                - departure
+                - arrival
+                - airline_id
+                - airplane_id
+      security: []
+  '/api/v1/flights/{id}':
+    get:
+      summary: 'Show a specific flight'
+      operationId: showASpecificFlight
+      description: 'Get details of a specific flight by ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  flightno: AA100
+                  from: 1
+                  to: 2
+                  departure: '2023-01-01T10:00:00.000000Z'
+                  arrival: '2023-01-01T14:00:00.000000Z'
+                  airline_id: 1
+                  airplane_id: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  flightno:
+                    type: string
+                    example: AA100
+                  from:
+                    type: integer
+                    example: 1
+                  to:
+                    type: integer
+                    example: 2
+                  departure:
+                    type: string
+                    example: '2023-01-01T10:00:00.000000Z'
+                  arrival:
+                    type: string
+                    example: '2023-01-01T14:00:00.000000Z'
+                  airline_id:
+                    type: integer
+                    example: 1
+                  airplane_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Flight] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Flight] 1'
+      tags:
+        - 'Flight Management'
+      security: []
+    put:
+      summary: 'Update a flight'
+      operationId: updateAFlight
+      description: "Update an existing flight's information."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  flightno: AA100
+                  from: 1
+                  to: 2
+                  departure: '2023-01-01T10:00:00.000000Z'
+                  arrival: '2023-01-01T14:00:00.000000Z'
+                  airline_id: 1
+                  airplane_id: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  flightno:
+                    type: string
+                    example: AA100
+                  from:
+                    type: integer
+                    example: 1
+                  to:
+                    type: integer
+                    example: 2
+                  departure:
+                    type: string
+                    example: '2023-01-01T10:00:00.000000Z'
+                  arrival:
+                    type: string
+                    example: '2023-01-01T14:00:00.000000Z'
+                  airline_id:
+                    type: integer
+                    example: 1
+                  airplane_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Flight] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Flight] 1'
+      tags:
+        - 'Flight Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightno:
+                  type: string
+                  description: 'The flight number.'
+                  example: AA100
+                  nullable: false
+                from:
+                  type: integer
+                  description: 'The departure airport ID.'
+                  example: 1
+                  nullable: false
+                to:
+                  type: integer
+                  description: 'The arrival airport ID.'
+                  example: 2
+                  nullable: false
+                departure:
+                  type: string
+                  description: 'The departure date and time.'
+                  example: '2023-01-01 10:00:00'
+                  nullable: false
+                arrival:
+                  type: string
+                  description: 'The arrival date and time.'
+                  example: '2023-01-01 14:00:00'
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: 'The airline ID.'
+                  example: 1
+                  nullable: false
+                airplane_id:
+                  type: integer
+                  description: 'The airplane ID.'
+                  example: 1
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete a flight'
+      operationId: deleteAFlight
+      description: 'Remove a flight from the system.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Flight] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Flight] 1'
+      tags:
+        - 'Flight Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the flight.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v2/flights:
+    get:
+      summary: 'List all flights'
+      operationId: listAllFlights
+      description: 'Get a list of all flights in the system.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      flightno: AA100
+                      from: 1
+                      to: 2
+                      departure: '2023-01-01T10:00:00.000000Z'
+                      arrival: '2023-01-01T14:00:00.000000Z'
+                      airline_id: 1
+                      airplane_id: 1
+                      created_at: '2023-01-01T00:00:00.000000Z'
+                      updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        flightno: AA100
+                        from: 1
+                        to: 2
+                        departure: '2023-01-01T10:00:00.000000Z'
+                        arrival: '2023-01-01T14:00:00.000000Z'
+                        airline_id: 1
+                        airplane_id: 1
+                        created_at: '2023-01-01T00:00:00.000000Z'
+                        updated_at: '2023-01-01T00:00:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        flightno:
+                          type: string
+                          example: AA100
+                        from:
+                          type: integer
+                          example: 1
+                        to:
+                          type: integer
+                          example: 2
+                        departure:
+                          type: string
+                          example: '2023-01-01T10:00:00.000000Z'
+                        arrival:
+                          type: string
+                          example: '2023-01-01T14:00:00.000000Z'
+                        airline_id:
+                          type: integer
+                          example: 1
+                        airplane_id:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2023-01-01T00:00:00.000000Z'
+      tags:
+        - 'Flight Management'
+      security: []
+    post:
+      summary: 'Create a new flight'
+      operationId: createANewFlight
+      description: 'Create a new flight with the provided information.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  flightno: AA100
+                  from: 1
+                  to: 2
+                  departure: '2023-01-01T10:00:00.000000Z'
+                  arrival: '2023-01-01T14:00:00.000000Z'
+                  airline_id: 1
+                  airplane_id: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  flightno:
+                    type: string
+                    example: AA100
+                  from:
+                    type: integer
+                    example: 1
+                  to:
+                    type: integer
+                    example: 2
+                  departure:
+                    type: string
+                    example: '2023-01-01T10:00:00.000000Z'
+                  arrival:
+                    type: string
+                    example: '2023-01-01T14:00:00.000000Z'
+                  airline_id:
+                    type: integer
+                    example: 1
+                  airplane_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    flightno:
+                      - 'The flightno field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      flightno:
+                        type: array
+                        example:
+                          - 'The flightno field is required.'
+                        items:
+                          type: string
+      tags:
+        - 'Flight Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightno:
+                  type: string
+                  description: 'The flight number.'
+                  example: AA100
+                  nullable: false
+                from:
+                  type: integer
+                  description: 'The departure airport ID.'
+                  example: 1
+                  nullable: false
+                to:
+                  type: integer
+                  description: 'The arrival airport ID.'
+                  example: 2
+                  nullable: false
+                departure:
+                  type: string
+                  description: 'The departure date and time.'
+                  example: '2023-01-01 10:00:00'
+                  nullable: false
+                arrival:
+                  type: string
+                  description: 'The arrival date and time.'
+                  example: '2023-01-01 14:00:00'
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: 'The airline ID.'
+                  example: 1
+                  nullable: false
+                airplane_id:
+                  type: integer
+                  description: 'The airplane ID.'
+                  example: 1
+                  nullable: false
+              required:
+                - flightno
+                - from
+                - to
+                - departure
+                - arrival
+                - airline_id
+                - airplane_id
+      security: []
+  '/api/v2/flights/{id}':
+    get:
+      summary: 'Show a specific flight'
+      operationId: showASpecificFlight
+      description: 'Get details of a specific flight by ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  flightno: AA100
+                  from: 1
+                  to: 2
+                  departure: '2023-01-01T10:00:00.000000Z'
+                  arrival: '2023-01-01T14:00:00.000000Z'
+                  airline_id: 1
+                  airplane_id: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  flightno:
+                    type: string
+                    example: AA100
+                  from:
+                    type: integer
+                    example: 1
+                  to:
+                    type: integer
+                    example: 2
+                  departure:
+                    type: string
+                    example: '2023-01-01T10:00:00.000000Z'
+                  arrival:
+                    type: string
+                    example: '2023-01-01T14:00:00.000000Z'
+                  airline_id:
+                    type: integer
+                    example: 1
+                  airplane_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Flight] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Flight] 1'
+      tags:
+        - 'Flight Management'
+      security: []
+    put:
+      summary: 'Update a flight'
+      operationId: updateAFlight
+      description: "Update an existing flight's information."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  flightno: AA100
+                  from: 1
+                  to: 2
+                  departure: '2023-01-01T10:00:00.000000Z'
+                  arrival: '2023-01-01T14:00:00.000000Z'
+                  airline_id: 1
+                  airplane_id: 1
+                  created_at: '2023-01-01T00:00:00.000000Z'
+                  updated_at: '2023-01-01T00:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  flightno:
+                    type: string
+                    example: AA100
+                  from:
+                    type: integer
+                    example: 1
+                  to:
+                    type: integer
+                    example: 2
+                  departure:
+                    type: string
+                    example: '2023-01-01T10:00:00.000000Z'
+                  arrival:
+                    type: string
+                    example: '2023-01-01T14:00:00.000000Z'
+                  airline_id:
+                    type: integer
+                    example: 1
+                  airplane_id:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2023-01-01T00:00:00.000000Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Flight] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Flight] 1'
+      tags:
+        - 'Flight Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightno:
+                  type: string
+                  description: 'The flight number.'
+                  example: AA100
+                  nullable: false
+                from:
+                  type: integer
+                  description: 'The departure airport ID.'
+                  example: 1
+                  nullable: false
+                to:
+                  type: integer
+                  description: 'The arrival airport ID.'
+                  example: 2
+                  nullable: false
+                departure:
+                  type: string
+                  description: 'The departure date and time.'
+                  example: '2023-01-01 10:00:00'
+                  nullable: false
+                arrival:
+                  type: string
+                  description: 'The arrival date and time.'
+                  example: '2023-01-01 14:00:00'
+                  nullable: false
+                airline_id:
+                  type: integer
+                  description: 'The airline ID.'
+                  example: 1
+                  nullable: false
+                airplane_id:
+                  type: integer
+                  description: 'The airplane ID.'
+                  example: 1
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete a flight'
+      operationId: deleteAFlight
+      description: 'Remove a flight from the system.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'No query results for model [App\Models\Flight] 1'
+                properties:
+                  message:
+                    type: string
+                    example: 'No query results for model [App\Models\Flight] 1'
+      tags:
+        - 'Flight Management'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the flight.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+tags:
+  -
+    name: 'Airline Management'
+    description: "\nAPIs for managing airline companies and their information."
+  -
+    name: 'Airport Management'
+    description: "\nAPIs for managing airport information including IATA/ICAO codes and names."
+  -
+    name: Authentication
+    description: "\nAPIs for handling authentication including Google OAuth2 and token management."
+  -
+    name: Endpoints
+    description: ''
+  -
+    name: 'Flight Management'
+    description: "\nAPIs for managing flight schedules and information."
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.'
+security:
+  -
+    default: []
