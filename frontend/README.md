@@ -1,75 +1,59 @@
-# Nuxt Minimal Starter
+# AeroAdmin Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+An airline management system built with Nuxt 3 and Vue.js.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+- **Dashboard** - Overview of flights, passengers, airplanes, and bookings
+- **Flight Management** - Create, edit, view, and delete flights
+- **Passenger Management** - Manage passenger information and details
+- **Booking Management** - Handle flight bookings and reservations
+- **Responsive Design** - Works on desktop and mobile devices
+- **Real-time Data** - Connected to Laravel backend API
+
+## Prerequisites
+
+- Node.js 18+ 
+- npm, pnpm, yarn, or bun
+- Backend API running on http://127.0.0.1:8000
+
+## Quick Start
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Access the application:**
+   - Frontend: http://localhost:3000
+   - Backend API: http://127.0.0.1:8000
+
+## Configuration
+
+The app connects to the Laravel backend API. Make sure the backend is running before starting the frontend.
+
+## Pages
+
+- `/` - Dashboard with statistics
+- `/flights` - Flight management
+- `/passengers` - Passenger management  
+- `/bookings` - Booking management
+
+## Build for Production
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Tech Stack
+
+- **Framework:** Nuxt 3
+- **Language:** TypeScript
+- **Styling:** Custom CSS
+- **API:** RESTful API calls to Laravel backend
