@@ -15,7 +15,7 @@ class PassengerController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'passportno' => 'required|string|max:9',
+            'passportno' => 'required|string|max:20',
             'firstname' => 'required|string|max:100',
             'lastname' => 'required|string|max:100',
         ]);

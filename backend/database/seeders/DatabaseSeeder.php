@@ -15,6 +15,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndUsersSeeder::class,
             BasicAuthUserSeeder::class,
+            AirportSeeder::class,
+            AirlineSeeder::class,
+            AirplaneTypeSeeder::class,
+            AirplaneSeeder::class,
+            FlightSeeder::class,
+            PassengerSeeder::class,
+            BookingSeeder::class,
         ]);
     }
 }
