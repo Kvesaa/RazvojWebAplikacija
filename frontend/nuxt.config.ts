@@ -1,9 +1,13 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      apiBase: 'https://5e41-77-77-217-199.ngrok-free.app/', // Your Laravel backend URL
+      apiBase: 'http://127.0.0.1:8000/api/v1',
+      basicAuth: 'basic_user@example.com:basic_pass',
     },
   },
-  devtools: { enabled: true },
-  compatibilityDate: '2025-05-15',
+  devtools: { enabled: false },
+  nitro: {
+    compatibilityDate: '2025-09-14',
+  },
+  css: ['~/assets/css/global.css'],
 })

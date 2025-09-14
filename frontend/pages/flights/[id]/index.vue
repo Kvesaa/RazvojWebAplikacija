@@ -1,215 +1,317 @@
 <template>
-  <div class="flight-details" v-if="flight">
-    <NuxtLink to="/flights" class="back-link">&larr; All Flights</NuxtLink>
-
-    <h2>Flight {{ flight.flightno }} Details</h2>
-
-    <div class="flight-info">
-      <div>
-        <strong>Flight No.</strong><br />
-        {{ flight.flightno }}
-      </div>
-      <div>
-        <strong>From Airport</strong><br />
-        {{ flight.from }}
-      </div>
-      <div>
-        <strong>To Airport</strong><br />
-        {{ flight.to }}
-      </div>
-      <div>
-        <strong>Departure</strong><br />
-        {{ formatDate(flight.departure) }}
-      </div>
-      <div>
-        <strong>Arrival</strong><br />
-        {{ formatDate(flight.arrival) }}
-      </div>
-      <div>
-        <strong>Airline</strong><br />
-        {{ flight.airline_id }}
-      </div>
-      <div>
-        <strong>Airplane</strong><br />
-        {{ flight.airplane_id }}
+  <div class="flight-detail-page">
+    <div class="page-header">
+      <div class="page-header-content">
+        <h1>
+          <span class="page-header-icon">✈️</span>
+          Flight Details
+        </h1>
+        <p>View flight information and passenger bookings</p>
       </div>
     </div>
 
-    <div class="button-group">
-      <NuxtLink :to="`/flights/${flightId}/edit`">
-        <button>Edit</button>
-      </NuxtLink>
-      <button class="delete" @click="onDelete">Delete</button>
+    <div v-if="pending" class="text-center py-4">
+      <div class="spinner"></div>
+      <p class="text-muted mt-2">Loading flight details...</p>
     </div>
 
-    <h3>Passengers on This Flight</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Seat</th>
-          <th>Passenger</th>
-          <th>Email</th>
-          <th>Contact</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="p in passengers" :key="p.id">
-          <td>{{ p.seat }}</td>
-          <td>{{ p.name }}</td>
-          <td>{{ p.email }}</td>
-          <td>{{ p.contact }}</td>
-          <td><button class="view-button">View</button></td>
-        </tr>
-        <tr v-if="passengers.length === 0">
-          <td colspan="5">No passengers for this flight.</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else-if="error" class="alert alert-danger">
+      ❌ Error loading flight: {{ error.message }}
+    </div>
 
-    <h3>Flight Logs</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Log Date</th>
-          <th>Changed By</th>
-          <th>Old Values</th>
-          <th>New Values</th>
-          <th>Comment</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Oct 19, 2023 11:30</td>
-          <td>Alice Smith</td>
-          <td>
-            25.Aug.20 08:00<br />
-            Aug 20, 10:00
-          </td>
-          <td>
-            25.Aug.20 09:30<br />
-            Aug 20, 10:30
-          </td>
-          <td>Updated departure time</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else-if="!flight" class="alert alert-warning">
+      Flight not found.
+    </div>
+
+    <div v-else class="card">
+      <div class="card-header">
+        <h2 class="card-title">Flight Information</h2>
+      </div>
+      <div class="card-body">
+        <div class="detail-row">
+          <span class="detail-label">Flight Number:</span>
+          <span class="detail-value">{{ flight.flightno }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">From:</span>
+          <span class="detail-value">{{ getAirportName(flight.from) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">To:</span>
+          <span class="detail-value">{{ getAirportName(flight.to) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Departure:</span>
+          <span class="detail-value">{{ formatDate(flight.departure) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Arrival:</span>
+          <span class="detail-value">{{ formatDate(flight.arrival) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Airline:</span>
+          <span class="detail-value">{{ getAirlineName(flight.airline_id) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Airplane:</span>
+          <span class="detail-value">{{ getAirplaneInfo(flight.airplane_id) }}</span>
+        </div>
+      </div>
+      <div class="card-footer form-actions">
+        <NuxtLink :to="`/flights/${flightId}/edit`" class="btn btn-warning">
+          ✂ Edit Flight
+        </NuxtLink>
+        <button @click="onDelete" class="btn btn-danger">
+          ❌ Delete Flight
+        </button>
+        <NuxtLink to="/flights" class="btn btn-secondary">
+          ← Back to Flights
+        </NuxtLink>
+      </div>
+    </div>
+
+    <!-- Passengers on This Flight -->
+    <div v-if="flight && bookings && bookings.length > 0" class="card mt-4">
+      <div class="card-header">
+        <h2 class="card-title">Passengers on This Flight ({{ bookings.length }})</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Passenger</th>
+                <th>Seat</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="booking in bookings" :key="booking.booking_id">
+                <td>{{ getPassengerName(booking.passenger_id) }}</td>
+                <td>{{ booking.seat || 'N/A' }}</td>
+                <td>${{ booking.price || '0.00' }}</td>
+                <td>
+                  <NuxtLink :to="`/passengers/${booking.passenger_id}`" class="btn btn-info btn-sm">
+                    <span class="icon">ℹ</span>
+                  </NuxtLink>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAsyncData, useRuntimeConfig } from '#imports'
-import { useFlights } from '~/composables/useFlights'
+<script setup lang="ts">
+import { useRoute, useRouter, useRuntimeConfig, useAsyncData } from '#imports'
 
-// Params, router, config
-const route    = useRoute()
-const router   = useRouter()
-const config   = useRuntimeConfig()
-const flightId = computed(() => Number(route.params.id))
+interface Flight {
+  flight_id: number
+  flightno: string
+  from: number
+  to: number
+  departure: string
+  arrival: string
+  airline_id: number
+  airplane_id: number
+}
 
-// Dynamic key so it re-fetches on each navigation
-const dataKey = computed(() => `flight-${flightId.value}-${route.fullPath}`)
+interface Airport {
+  airport_id: number
+  iata: string
+  icao: string
+  name: string
+}
 
-// Fetch flight using useAsyncData (no TS generics)
-const { data: flightData, error } = await useAsyncData(
-  dataKey,
-  () => $fetch(`/api/flights/${flightId.value}`, {
+interface Airline {
+  airline_id: number
+  iata: string
+  airlinename: string
+}
+
+interface Airplane {
+  airplane_id: number
+  capacity: number
+  type_id: number
+  airline_id: number
+}
+
+interface Booking {
+  booking_id: number
+  passenger_id: number
+  flight_id: number
+  seat: string
+  price: number
+}
+
+interface Passenger {
+  passenger_id: number
+  passportno: string
+  firstname: string
+  lastname: string
+}
+
+const route = useRoute()
+const router = useRouter()
+const config = useRuntimeConfig()
+const flightId = parseInt(route.params.id as string)
+
+const {
+  data: flight,
+  pending,
+  error,
+  refresh: refreshFlight
+} = await useAsyncData<Flight>(
+  `flight-${flightId}`,
+  () => $fetch(`/flights/${flightId}`, {
     baseURL: config.public.apiBase,
-    headers: { Accept: 'application/json' }
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
   }),
   {
-    onError: () => {
-      router.replace('/flights')
-    }
+    default: () => null
   }
 )
 
-// Expose plain `flight` for template
-const flight = computed(() => flightData.value)
-
-// Passengers (static for now)
-const passengers = ref([
-  { id:1, seat:'12A', name:'John Doe',            email:'john@example.com',       contact:'+123 456 7890' },
-  { id:2, seat:'14B', name:'Jane Smith',          email:'jane@example.com',       contact:'+987 654 3210' },
-  { id:3, seat:'15C', name:'Carlos Ruiz',         email:'carlos.ruiz@example.com',contact:'+385 91 234 5678' },
-  { id:4, seat:'16D', name:'Johannes Schmidt',    email:'johannessc@example.com', contact:'+387 62 112 334' }
-])
-
-// Delete via composable, then navigate home
-const { deleteFlight } = useFlights()
-function onDelete() {
-  if (confirm('Are you sure you want to delete this flight?')) {
-    deleteFlight(flightId.value)
-    router.push('/flights')
+// get airports
+const {
+  data: airports,
+  refresh: refreshAirports
+} = await useAsyncData<Airport[]>(
+  'airports-for-flight-detail',
+  () => $fetch('/airport', {
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
   }
+)
+
+// get airlines
+const {
+  data: airlines,
+  refresh: refreshAirlines
+} = await useAsyncData<Airline[]>(
+  'airlines-for-flight-detail',
+  () => $fetch('/airline', {
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// get airplanes
+const {
+  data: airplanes,
+  refresh: refreshAirplanes
+} = await useAsyncData<Airplane[]>(
+  'airplanes-for-flight-detail',
+  () => $fetch('/airplane', {
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// Fetch bookings for this flight
+const {
+  data: bookings,
+  refresh: refreshBookings
+} = await useAsyncData<Booking[]>(
+  `bookings-for-flight-${flightId}`,
+  () => $fetch('/booking', {
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// get passengers
+const {
+  data: passengers,
+  refresh: refreshPassengers
+} = await useAsyncData<Passenger[]>(
+  'passengers-for-flight-detail',
+  () => $fetch('/passengers', {
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// Filter bookings for this flight
+const flightBookings = computed(() => {
+  return bookings.value?.filter(b => b.flight_id === flightId) || []
+})
+
+// Function to get airport name by ID
+function getAirportName(airportId: number): string {
+  const airport = airports.value?.find(a => a.airport_id === airportId)
+  return airport ? `${airport.iata} - ${airport.name}` : `Airport ${airportId}`
+}
+
+// Function to get airline name by ID
+function getAirlineName(airlineId: number): string {
+  const airline = airlines.value?.find(a => a.airline_id === airlineId)
+  return airline ? airline.airlinename : `Airline ${airlineId}`
+}
+
+// Function to get airplane info by ID
+function getAirplaneInfo(airplaneId: number): string {
+  const airplane = airplanes.value?.find(a => a.airplane_id === airplaneId)
+  return airplane ? `Airplane ${airplaneId} (${airplane.capacity} seats)` : `Airplane ${airplaneId}`
+}
+
+// Function to get passenger name by ID
+function getPassengerName(passengerId: number): string {
+  const passenger = passengers.value?.find(p => p.passenger_id === passengerId)
+  return passenger ? `${passenger.firstname} ${passenger.lastname}` : `Passenger ${passengerId}`
 }
 
 // Date formatter
-function formatDate(dt) {
+function formatDate(dt: string): string {
   return dt ? new Date(dt).toLocaleString() : ''
 }
+
+async function onDelete() {
+  if (confirm('Are you sure you want to delete this flight? This will also delete all associated bookings.')) {
+    try {
+      await $fetch(`/flights/${flightId}`, {
+        method: 'DELETE',
+        baseURL: config.public.apiBase,
+        headers: {
+          'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+        }
+      })
+      alert('Flight deleted successfully!')
+      router.push('/flights')
+    } catch (error) {
+      console.error('Failed to delete flight:', error)
+      alert('Failed to delete flight. Please try again.')
+    }
+  }
+}
 </script>
-
-<style scoped>
-.back-link {
-  display: inline-block;
-  margin-bottom: 20px;
-  color: #0b3a66;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.flight-info {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  border: 1px solid #0b3a66;
-  padding: 16px;
-  margin-bottom: 24px;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-.button-group button {
-  background-color: #0b3a66;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.button-group .delete {
-  background-color: #a40000;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-}
-
-th,
-td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-th {
-  background-color: #e5eef8;
-}
-
-.view-button {
-  background-color: #0b3a66;
-  color: white;
-  padding: 6px 12px;
-  border: none;
-  cursor: pointer;
-}
-</style>

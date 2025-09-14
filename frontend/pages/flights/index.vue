@@ -1,52 +1,138 @@
 <template>
   <div class="flights-page">
     <div class="page-header">
-      <h1>Flights</h1>
-      <NuxtLink to="/flights/new" class="add-button">Add New Flight</NuxtLink>
+      <div class="page-header-content">
+        <h1>
+          <span class="page-header-icon">✈️</span>
+          Flight Management
+        </h1>
+        <p>Manage all your airline flights</p>
+      </div>
     </div>
 
-    <form class="search-form" @submit.prevent="searchFlights">
-      <input type="text" v-model="filters.flight" placeholder="Flight" />
-      <input type="text" v-model="filters.from" placeholder="From" />
-      <input type="text" v-model="filters.to" placeholder="To" />
-      <input type="text" v-model="filters.departure" placeholder="Departure" />
-      <input type="text" v-model="filters.arrival" placeholder="Arrival" />
-      <button type="submit" class="search-button">Search</button>
-    </form>
+    <div class="card">
+      <form class="search-form" @submit.prevent="searchFlights">
+        <div class="form-row">
+          <div class="form-group">
+            <input 
+              type="text" 
+              v-model="filters.flight" 
+              placeholder="Flight Number" 
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <input 
+              type="text" 
+              v-model="filters.from" 
+              placeholder="From Airport" 
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <input 
+              type="text" 
+              v-model="filters.to" 
+              placeholder="To Airport" 
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <input 
+              type="date" 
+              v-model="filters.departure" 
+              placeholder="Departure Date" 
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+              🔍 Search Flights
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
 
-    <div v-if="pending">Loading...</div>
-    <div v-else-if="error">Error loading flights: {{ error.message }}</div>
-    <table v-else class="flights-table">
-      <thead>
-        <tr>
-          <th>Flight</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Departure</th>
-          <th>Arrival</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="flight in filteredFlights" :key="flight.flight_id">
-          <td>
-            <NuxtLink :to="`/flights/${flight.flight_id}`" class="flight-link">
-              {{ flight.flightno }}
-            </NuxtLink>
-          </td>
-          <td>{{ flight.from }}</td>
-          <td>{{ flight.to }}</td>
-          <td>{{ flight.departure }}</td>
-          <td>{{ flight.arrival }}</td>
-          <td><button class="view-button">View</button></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title">📋 All Flights ({{ filteredFlights.length }})</h2>
+        <div class="d-flex gap-2">
+          <button @click="refreshData" class="btn btn-info btn-sm" :disabled="pending">
+            <span v-if="pending" class="spinner"></span>
+            {{ pending ? 'Loading...' : '🔄 Refresh' }}
+          </button>
+          <NuxtLink to="/flights/new" class="btn btn-success">
+            ✈️ Add New Flight
+          </NuxtLink>
+        </div>
+      </div>
 
-    <div class="pagination">
-      <span>Previous</span>
-      <span class="page-number">1</span>
-      <span>Next</span>
+      <div v-if="pending" class="text-center py-4">
+        <div class="spinner"></div>
+        <p class="text-muted mt-2">Loading flights...</p>
+      </div>
+      
+      <div v-else-if="error" class="alert alert-danger">
+        ❌ Error loading flights: {{ error.message }}
+      </div>
+      
+      <div v-else class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Departure</th>
+              <th>Arrival</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="flight in filteredFlights" :key="flight.flight_id">
+              <td>
+                <NuxtLink :to="`/flights/${flight.flight_id}`" class="nav-link">
+                  <strong>{{ flight.flightno }}</strong>
+                </NuxtLink>
+              </td>
+              <td>{{ getAirportName(flight.from) }}</td>
+              <td>{{ getAirportName(flight.to) }}</td>
+              <td>{{ formatDate(flight.departure) }}</td>
+              <td>{{ formatDate(flight.arrival) }}</td>
+              <td>
+                <div class="d-flex gap-1">
+                  <NuxtLink :to="`/flights/${flight.flight_id}`" class="btn btn-info btn-sm">
+                    <span class="icon">ℹ</span>
+                  </NuxtLink>
+                  <NuxtLink :to="`/flights/${flight.flight_id}/edit`" class="btn btn-warning btn-sm">
+                    <span class="icon">✂</span>
+                  </NuxtLink>
+                  <button @click="deleteFlight(flight.flight_id)" class="btn btn-danger btn-sm">
+                    <span class="icon">❌</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="filteredFlights.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                No flights found. <NuxtLink to="/flights/new" class="btn btn-primary btn-sm">Create your first flight</NuxtLink>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="text-muted">Showing {{ filteredFlights.length }} flights</span>
+        <div class="pagination">
+          <button class="btn btn-outline btn-sm" disabled>← Previous</button>
+          <span class="page-number mx-2">1</span>
+          <button class="btn btn-outline btn-sm" disabled>Next →</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -74,13 +160,40 @@ const config = useRuntimeConfig()
 // dynamic key so useAsyncData re-runs on every navigation to /flights
 const dataKey = computed(() => `flights-${route.fullPath}`)
 
+// get flights from api
 const {
   data: flights,
   pending,
   error,
+  refresh
 } = await useAsyncData<Flight[]>(
-  dataKey,
-  () => $fetch('/api/flights', { baseURL: config.public.apiBase })
+  'flights',
+  () => $fetch('/flights', { 
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// get airports
+const {
+  data: airports,
+  refresh: refreshAirports
+} = await useAsyncData(
+  'airports',
+  () => $fetch('/airport', {
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
 )
 
 // client-side filters
@@ -102,88 +215,94 @@ const filteredFlights = computed(() => {
   )
 })
 
+// Function to get airport name by ID
+function getAirportName(airportId: number): string {
+  const airport = airports.value?.find(a => a.airport_id === airportId)
+  return airport ? `${airport.iata} - ${airport.name}` : `Airport ${airportId}`
+}
+
 function searchFlights() {
+  // Search functionality is handled by computed filteredFlights
+}
+
+// Add refresh function for the refresh button
+async function refreshData() {
+  await Promise.all([
+    refresh(),
+    refreshAirports()
+  ])
+}
+
+async function deleteFlight(flightId: number) {
+  if (confirm('Are you sure you want to delete this flight?')) {
+    try {
+      await $fetch(`/flights/${flightId}`, {
+        method: 'DELETE',
+        baseURL: config.public.apiBase,
+        headers: {
+          'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+        }
+      })
+      
+      // Refresh the flights list
+      await refresh()
+      alert('Flight deleted successfully!')
+    } catch (error) {
+      console.error('Failed to delete flight:', error)
+      alert('Failed to delete flight. Please try again.')
+    }
+  }
+}
+
+function formatDate(dateString: string) {
+  if (!dateString) return 'N/A'
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 </script>
 
 <style scoped>
-.flights-page {
-  font-family: sans-serif;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.add-button {
-  background-color: #0b3a66;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .search-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
-.search-form input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  flex: 1;
-  min-width: 100px;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: end;
 }
 
-.search-button {
-  background-color: #0b3a66;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.flights-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 16px;
-  border: 1px solid #0b3a66;
-}
-
-.flights-table th,
-.flights-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-.flights-table th {
-  background-color: #e5eef8;
-}
-
-.view-button {
-  background-color: #0b3a66;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-weight: bold;
+.form-group {
+  margin-bottom: 0;
 }
 
 .pagination {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  color: #444;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .page-number {
   font-weight: bold;
-  padding: 0 6px;
+  padding: 0.5rem;
+  background: var(--light-bg);
+  border-radius: var(--border-radius-sm);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .d-flex.gap-1 {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 }
 </style>

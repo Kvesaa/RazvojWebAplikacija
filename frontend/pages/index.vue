@@ -1,146 +1,269 @@
 <template>
   <div class="dashboard">
-    <h1>Dashboard</h1>
+    <div class="page-header">
+      <div class="page-header-content">
+        <h1>
+          <span class="page-header-icon">✈️</span>
+          AeroAdmin Dashboard
+        </h1>
+        <p>Welcome to your flight management system</p>
+      </div>
+    </div>
 
     <!-- Stat cards -->
-    <div class="stat-cards">
-      <NuxtLink to="/flights" class="stat-card-link">
-        <StatCard title="Flights" :value="flights?.length" />
-      </NuxtLink>
-      <StatCard title="Airplanes" value="25" />
-      <StatCard title="Passengers" value="35000" />
-      <StatCard title="Bookings" value="850" />
+    <div class="stats-grid">
+      <div class="card stat-card">
+        <div class="stat-icon">✈️</div>
+        <div class="stat-content">
+          <h3>{{ flights?.length || 0 }}</h3>
+          <p>Active Flights</p>
+        </div>
+        <NuxtLink to="/flights" class="stat-link">View All</NuxtLink>
+      </div>
+      
+                      <div class="card stat-card">
+                        <div class="stat-icon">🛩️</div>
+                        <div class="stat-content">
+                          <h3>{{ airplanes?.length || 0 }}</h3>
+                          <p>Airplanes</p>
+                        </div>
+                        <button class="stat-link">Manage</button>
+                      </div>
+                      
+                      <div class="card stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                          <h3>{{ passengers?.length || 0 }}</h3>
+                          <p>Passengers</p>
+                        </div>
+                        <button class="stat-link">View</button>
+                      </div>
+                      
+                      <div class="card stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-content">
+                          <h3>{{ bookings?.length || 0 }}</h3>
+                          <p>Bookings</p>
+                        </div>
+                        <button class="stat-link">Manage</button>
+                      </div>
     </div>
 
     <!-- Quick actions -->
-    <div class="quick-actions">
-      <h2>Quick Actions</h2>
-      <div class="button-group">
-        <NuxtLink to="/flights/new"><button>Add Flight</button></NuxtLink>
-        <button>Add Booking</button>
-        <button>Add Passenger</button>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">🚀 Quick Actions</h2>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <NuxtLink to="/flights/new" class="btn btn-primary">
+          ✈️ Add Flight
+        </NuxtLink>
+        <button class="btn btn-outline">📋 Add Booking</button>
+        <button class="btn btn-outline">👤 Add Passenger</button>
+        <button class="btn btn-outline">🛩️ Add Airplane</button>
       </div>
     </div>
 
     <!-- Recent Flights -->
-    <div class="recent-flights">
-      <h2>Recent Flights</h2>
-      <div v-if="pending">Loading...</div>
-      <div v-else-if="error">Error loading flights: {{ error.message }}</div>
-      <table v-else>
-        <thead>
-          <tr>
-            <th>Flight</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Departure</th>
-            <th>Arrival</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="flight in flights || []" :key="flight.flight_id">
-            <td>
-              <NuxtLink
-                :to="`/flights/${flight.flight_id}`"
-                class="flight-link"
-              >
-                {{ flight.flightno }}
-              </NuxtLink>
-            </td>
-            <td>{{ flight.from }}</td>
-            <td>{{ flight.to }}</td>
-            <td>{{ flight.departure }}</td>
-            <td>{{ flight.arrival }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title">📅 Recent Flights</h2>
+                        <button @click="refreshAllData" class="btn btn-success btn-sm" :disabled="pending">
+                          <span v-if="pending" class="spinner"></span>
+                          {{ pending ? 'Loading...' : '🔄 Refresh All' }}
+                        </button>
+      </div>
+      
+      <div v-if="pending" class="text-center py-4">
+        <div class="spinner"></div>
+        <p class="text-muted mt-2">Loading flights...</p>
+      </div>
+      
+      <div v-else-if="error" class="alert alert-danger">
+        ❌ Error loading flights: {{ error.message }}
+      </div>
+      
+      <div v-else class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Departure</th>
+              <th>Arrival</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="flight in flights || []" :key="flight.flight_id">
+              <td>
+                <NuxtLink :to="`/flights/${flight.flight_id}`" class="nav-link">
+                  <strong>{{ flight.flightno }}</strong>
+                </NuxtLink>
+              </td>
+              <td>{{ flight.from }}</td>
+              <td>{{ flight.to }}</td>
+              <td>{{ formatDate(flight.departure) }}</td>
+              <td>{{ formatDate(flight.arrival) }}</td>
+              <td>
+                <NuxtLink :to="`/flights/${flight.flight_id}`" class="btn btn-info btn-sm">
+                  👁️ View
+                </NuxtLink>
+              </td>
+            </tr>
+            <tr v-if="!flights || flights.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                No flights found. <NuxtLink to="/flights/new" class="btn btn-primary btn-sm">Create your first flight</NuxtLink>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { computed } from 'vue'
-import { useAsyncData, useRuntimeConfig } from '#imports'
 import StatCard from '~/components/dashboard/StatCard.vue'
 
-type Flight = {
-  flight_id: number
-  flightno: string
-  from: number
-  to: number
-  departure: string
-  arrival: string
-  airline_id: number
-  airplane_id: number
-}
-
-const route  = useRoute()
 const config = useRuntimeConfig()
 
-// key must change on every navigation
-const dataKey = computed(() => `flights-${route.fullPath}`)
-
+// get flights
 const {
   data: flights,
   pending,
   error,
+  refresh: refreshFlights
 } = await useAsyncData<Flight[]>(
-  dataKey,
-  () => $fetch('/api/flights', { baseURL: config.public.apiBase })
+  'dashboard-flights',
+  () => $fetch('/flights', { 
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
 )
+
+// get airplanes
+const {
+  data: airplanes,
+  refresh: refreshAirplanes
+} = await useAsyncData(
+  'dashboard-airplanes',
+  () => $fetch('/airplane', { 
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// get passengers
+const {
+  data: passengers,
+  refresh: refreshPassengers
+} = await useAsyncData(
+  'dashboard-passengers',
+  () => $fetch('/passengers', { 
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// get bookings
+const {
+  data: bookings,
+  refresh: refreshBookings
+} = await useAsyncData(
+  'dashboard-bookings',
+  () => $fetch('/booking', { 
+    baseURL: config.public.apiBase,
+    headers: {
+      'Authorization': `Basic ${btoa(config.public.basicAuth)}`
+    }
+  }),
+  {
+    default: () => []
+  }
+)
+
+// Combined refresh function for all dashboard data
+async function refreshAllData() {
+  await Promise.all([
+    refreshFlights(),
+    refreshAirplanes(),
+    refreshPassengers(),
+    refreshBookings()
+  ])
+}
+
+function formatDate(dateString: string) {
+  if (!dateString) return 'N/A'
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 </script>
 
 <style scoped>
-.dashboard {
-  font-family: sans-serif;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.stat-cards {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
+.stat-card {
+  position: relative;
+  padding: 1.5rem;
+  background: white;
+  border-left: 4px solid var(--primary-color);
 }
 
-.quick-actions {
-  border: 1px solid #0b3a66;
-  padding: 16px;
-  margin-bottom: 30px;
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+.stat-content h3 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--primary-color);
 }
 
-.button-group button {
-  background-color: #0b3a66;
+.stat-link {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--primary-color);
   color: white;
-  border: none;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-sm);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: var(--transition);
 }
 
-.button-group button:hover {
-  background-color: #14589e;
-}
-
-.recent-flights table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #0b3a66;
-}
-
-.recent-flights th,
-.recent-flights td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ccc;
-}
-
-.recent-flights th {
-  background-color: #e5eef8;
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
